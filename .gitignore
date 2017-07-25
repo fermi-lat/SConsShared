@@ -8,6 +8,7 @@ libtool
 Makefile
 Makefile.in
 stamp-h*
+*.config
 
 *.pyc
 build
