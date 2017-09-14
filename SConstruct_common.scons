@@ -136,9 +136,10 @@ if baseEnv.GetOption('variant'):
     if variant == "NONE": baseEnv['NO_VARIANT'] = True
 override = baseEnv.GetOption('supersede')
 if override == '#':
-    SConsignFile(os.path.join(platBrief , '.sconsign.dblite'))
+    SConsignFile(os.path.join('..',platBrief , '.sconsign.dblite'))
 else:
-    SConsignFile(os.path.join(os.path.join(override, platBrief) , '.sconsign.dblite'))
+    SConsignFile(os.path.join(os.path.join(override, '..', platBrief) , '.sconsign.dblite'))
+outputRoot = os.path.join(override, '..')
 baseEnv['VARIANT'] = variant
 baseEnv['PLATBRIEF'] = platBrief
 Export('baseEnv')
@@ -164,29 +165,29 @@ if baseEnv['PLATFORM'] == "darwin":
 #  Project Environment  #
 #########################
 if 'NO_VARIANT' in baseEnv:
-    baseEnv.Append(LIBDIR         = Dir(override).Dir('lib'))
-    baseEnv.Append(BINDIR         = Dir(override).Dir('exe'))
-    baseEnv.Append(SCRIPTDIR      = Dir(override).Dir('bin'))
+    baseEnv.Append(LIBDIR         = Dir(outputRoot).Dir('lib'))
+    baseEnv.Append(BINDIR         = Dir(outputRoot).Dir('exe'))
+    baseEnv.Append(SCRIPTDIR      = Dir(outputRoot).Dir('bin'))
 else:
-    baseEnv.Append(LIBDIR         = Dir(override).Dir('lib').Dir(variant))
-    baseEnv.Append(BINDIR         = Dir(override).Dir('exe').Dir(variant))
-    baseEnv.Append(SCRIPTDIR      = Dir(override).Dir('bin').Dir(variant))
+    baseEnv.Append(LIBDIR         = Dir(outputRoot).Dir('lib').Dir(variant))
+    baseEnv.Append(BINDIR         = Dir(outputRoot).Dir('exe').Dir(variant))
+    baseEnv.Append(SCRIPTDIR      = Dir(outputRoot).Dir('bin').Dir(variant))
     
-baseEnv.Append(INCDIR         = Dir(override).Dir('include'))
-baseEnv.Append(PFILESDIR      = Dir(override).Dir('syspfiles'))
-baseEnv.Append(DATADIR        = Dir(override).Dir('data'))
-baseEnv.Append(XMLDIR         = Dir(override).Dir('xml'))
-baseEnv.Append(JODIR          = Dir(override).Dir('jobOptions'))
-baseEnv.Append(TOOLDIR        = Dir(override).Dir('sconsTools'))
+baseEnv.Append(INCDIR         = Dir(outputRoot).Dir('include'))
+baseEnv.Append(PFILESDIR      = Dir(outputRoot).Dir('syspfiles'))
+baseEnv.Append(DATADIR        = Dir(outputRoot).Dir('data'))
+baseEnv.Append(XMLDIR         = Dir(outputRoot).Dir('xml'))
+baseEnv.Append(JODIR          = Dir(outputRoot).Dir('jobOptions'))
+baseEnv.Append(TOOLDIR        = Dir(outputRoot).Dir('sconsTools'))
 baseEnv.Append(TESTDIR        = baseEnv['BINDIR'])
 baseEnv.Append(TESTSCRIPTDIR  = baseEnv['SCRIPTDIR'])
-baseEnv.Append(PYTHONDIR      = Dir(override).Dir('python'))
-baseEnv.Append(DOCDIR         = Dir(override).Dir('SConsShared').Dir('Doxygen'))
+baseEnv.Append(PYTHONDIR      = Dir(outputRoot).Dir('python'))
+baseEnv.Append(DOCDIR         = Dir(outputRoot).Dir('SConsShared').Dir('Doxygen'))
 ##baseEnv.Append(DEFAULTDOCFILE = Dir('.').Dir('SConsShared').Dir('Doxygen').File('Default'))
 baseEnv.Append(DEFAULTDOCFILE = Dir('#').Dir('..').Dir('SConsShared').Dir('Doxygen').File('Default'))
 baseEnv.Append(DOXYGENOUTPUT  = baseEnv.GetOption('doxygenOutput'))
-baseEnv['CONFIGURELOG']       = str(Dir(override).File("config.log"))
-baseEnv['CONFIGUREDIR']       = str(Dir(override).Dir(".sconf_temp"))
+baseEnv['CONFIGURELOG']       = str(Dir(outputRoot).File("config.log"))
+baseEnv['CONFIGUREDIR']       = str(Dir(outputRoot).Dir(".sconf_temp"))
 baseEnv.Append(CPPPATH = ['.'])
 baseEnv.Append(CPPPATH = ['src'])
 baseEnv.Append(CPPPATH = [baseEnv['INCDIR']])
