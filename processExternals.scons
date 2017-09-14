@@ -161,7 +161,7 @@ def setupEnvironment(configuredExternal):
                         
 def checkEnvironment(configuredExternal):
     supersede = baseEnv.GetOption('supersede')
-    conf = baseEnv.Clone().Configure(conf_dir=os.path.join(supersede,baseEnv['PLATBRIEF']))
+    conf = baseEnv.Clone().Configure(conf_dir=os.path.join(supersede,'..',baseEnv['PLATBRIEF']))
     if 'includes' in configuredExternal:
         for include in configuredExternal['includes']:
             if not conf.CheckCXXHeader(include):
