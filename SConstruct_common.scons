@@ -246,7 +246,7 @@ if baseEnv.GetOption('develRelease'):
 #  Container Settings Directories   #
 #####################################
 Import('myVars')
-baseSettingsDir = '#/' + myVars['myPrefix'] + 'containerSettings'
+baseSettingsDir = '#/../' + myVars['myPrefix'] + 'containerSettings'
 #if os.path.exists('containerPrefix.scons'):
 #
 #    basePrefix = SConscript('containerPrefix.scons')
