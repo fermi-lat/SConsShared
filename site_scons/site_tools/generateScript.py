@@ -108,7 +108,8 @@ def fillScript(scriptFile, env, wrapper, script, executable):
         noVariant = False
         scriptdir = os.path.join(inst, 'bin', env['VARIANT'])
 
-    if env.GetOption('supersede') != '.':
+    #if env.GetOption('supersede') != '.':
+    if env.GetOption('supersede') != '#':
 	basedirAbs = env.Dir('.').abspath
 	if env['PLATFORM'] == "posix":  # might be nfs path
             basedirAbs = resolve_nfs_path(basedirAbs)
@@ -136,7 +137,11 @@ def fillScript(scriptFile, env, wrapper, script, executable):
     finalScript = finalScript.replace('${REPLACE-SCRIPTDIR}', scriptdir)
 
     #Set up LD_LIBRARY_PATH and DYLD_LIBRARY_PATH
-    ldLibraryPath = [ os.path.join(inst, relpath(env.Dir(env.GetOption('supersede')).abspath, env['LIBDIR'].abspath))]
+    #  New stuff for peer repositories in git
+    superOption = env.GetOption('supersede')
+    if superOption == '#' : superOption = '..'
+    #ldLibraryPath = [ os.path.join(inst, relpath(env.Dir(env.GetOption('supersede')).abspath, env['LIBDIR'].abspath))]
+    ldLibraryPath = [ os.path.join(inst, relpath(env.Dir(superOption).abspath, env['LIBDIR'].abspath))]
     if noVariant:
         ldLibraryPath.append(os.path.join(bs, 'lib'))
     else:
@@ -146,7 +151,8 @@ def fillScript(scriptFile, env, wrapper, script, executable):
 
     finalScript = finalScript.replace('${REPLACE-LIBDIRS}', separator.join(ldLibraryPath))
     #Setup PATH
-    path = [os.path.join(inst, relpath(env.Dir(env.GetOption('supersede')).abspath, env['BINDIR'].abspath))]
+    #path = [os.path.join(inst, relpath(env.Dir(env.GetOption('supersede')).abspath, env['BINDIR'].abspath))]
+    path = [os.path.join(inst, relpath(env.Dir(superOption).abspath, env['BINDIR'].abspath))]
     if noVariant:
         path.append(os.path.join(bs, 'exe'))
     else:
@@ -166,7 +172,8 @@ def fillScript(scriptFile, env, wrapper, script, executable):
 
     #Setup PYTHONPATH
     pythonPath = [os.path.join(inst,'python')]
-    pythonPath.append(os.path.join(inst, relpath(env.Dir(env.GetOption('supersede')).abspath, env['LIBDIR'].abspath)))
+    ##pythonPath.append(os.path.join(inst, relpath(env.Dir(env.GetOption('supersede')).abspath, env['LIBDIR'].abspath)))
+    pythonPath.append(os.path.join(inst, relpath(env.Dir(superOption).abspath, env['LIBDIR'].abspath)))
     pythonPath.append(os.path.join(bs, 'python'))
     if noVariant:
         pythonPath.append(os.path.join(bs, 'lib'))
@@ -177,10 +184,13 @@ def fillScript(scriptFile, env, wrapper, script, executable):
     
     if wrapper > 0:
         if noVariant:	
+            #finalScript = finalScript.replace('${REPLACE-WRAPPER-SCRIPT}', 'export INST_DIR=`dirname $0`\nexport INST_DIR=`cd $INST_DIR/../; pwd`\n')
             finalScript = finalScript.replace('${REPLACE-WRAPPER-SCRIPT}', 'export INST_DIR=`dirname $0`\nexport INST_DIR=`cd $INST_DIR/../; pwd`\n')
         else:
+            #finalScript = finalScript.replace('${REPLACE-WRAPPER-SCRIPT}', 'export INST_DIR=`dirname $0`\nexport INST_DIR=`cd $INST_DIR/../../; pwd`\n')
             finalScript = finalScript.replace('${REPLACE-WRAPPER-SCRIPT}', 'export INST_DIR=`dirname $0`\nexport INST_DIR=`cd $INST_DIR/../../; pwd`\n')
-        finalScript = finalScript.replace('${REPLACE-WRAPPER-EXECUTE}', os.path.join('$INST_DIR', relpath(env.Dir(env.GetOption('supersede')).abspath, executable.abspath)+' "$@"\n'))
+        #finalScript = finalScript.replace('${REPLACE-WRAPPER-EXECUTE}', os.path.join('$INST_DIR', relpath(env.Dir(env.GetOption('supersede')).abspath, executable.abspath)+' "$@"\n'))
+        finalScript = finalScript.replace('${REPLACE-WRAPPER-EXECUTE}', os.path.join('$INST_DIR', relpath(env.Dir(superOption).abspath, executable.abspath)+' "$@"\n'))
     else:
         finalScript = finalScript.replace('${REPLACE-WRAPPER-EXECUTE}', '')
         finalScript = finalScript.replace('${REPLACE-WRAPPER-SCRIPT}', '')
