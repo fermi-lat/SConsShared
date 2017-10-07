@@ -144,6 +144,16 @@ baseEnv['VARIANT'] = variant
 baseEnv['PLATBRIEF'] = platBrief
 Export('baseEnv')
 
+Import('myVars')
+baseSettingsDir = '#/../' + myVars['myPrefix'] + 'containerSettings'
+allExternals = SConscript('allExternals.scons')
+
+usedExternals = SConscript(os.path.join(baseSettingsDir, 'externals.scons'),
+                           exports = 'allExternals')
+
+for external in usedExternals:
+    print("%s-%s" %(external["name"], external["iversion"]))
+
 #########################
 #OS Specific Compile Opt#
 #########################
