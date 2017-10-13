@@ -115,28 +115,26 @@ def generate(env, **kw):
                 env.Alias('all', installedObjs)
 
         if kw.get('includes', '') != '':
-	    if  env.get('CONTAINERNAME','') != 'GlastRelease':
-
-                for header in kw.get('includes'):
-                    header = env.File(str(header))
-                    splitFile = str(env.Dir('.').srcnode().rel_path(header.srcnode()))
-                    installPath = ''
-                    while os.path.split(splitFile)[0] != '':
-                        parts = os.path.split(splitFile)
-                        splitFile = parts[0]
-                        installPath = os.path.normpath(os.path.join(parts[1], installPath))
-                    installPath = os.path.dirname(installPath)
-                    topInc = kw.get('topInclude', pkgname)
-                    if topInc == '*NONE*':
-                        includes = env.Install(env['INCDIR'].Dir(installPath), header)
-                    else:
-                        includes = env.Install(env['INCDIR'].Dir(topInc).Dir(installPath),
+            for header in kw.get('includes'):
+                header = env.File(str(header))
+                splitFile = str(env.Dir('.').srcnode().rel_path(header.srcnode()))
+                installPath = ''
+                while os.path.split(splitFile)[0] != '':
+                    parts = os.path.split(splitFile)
+                    splitFile = parts[0]
+                    installPath = os.path.normpath(os.path.join(parts[1], installPath))
+                installPath = os.path.dirname(installPath)
+                topInc = kw.get('topInclude', pkgname)
+                if topInc == '*NONE*':
+                    includes = env.Install(env['INCDIR'].Dir(installPath), header)
+                else:
+                    includes = env.Install(env['INCDIR'].Dir(topInc).Dir(installPath),
                                                header)
-                    env.Alias(kw.get('package'), includes)
-                    env.Default(includes)
-                    env.Alias('to_install', includes)
-                    env.Alias('includes', includes)
-                    env.Alias('all', includes)
+                env.Alias(kw.get('package'), includes)
+                env.Default(includes)
+                env.Alias('to_install', includes)
+                env.Alias('includes', includes)
+                env.Alias('all', includes)
         cxts = kw.get('testAppCxts', '')
         if cxts != '':
             nodes = []
