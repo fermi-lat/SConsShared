@@ -9,7 +9,7 @@ def generate(env):
         fp = open(str(target[0]), 'w')
         fp.write("# externals required for this super-package \n\n")
         for ext in env['configuredExternals']:
-            print("writeExternalsList: Processing external " + str(ext["name"]))
+            #print("writeExternalsList: Processing external " + str(ext["name"]))
             fp.write("%s-%s" %(ext["name"], ext["version"]))
             fp.write("\n")
         fp.close()
