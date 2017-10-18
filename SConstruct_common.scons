@@ -23,6 +23,7 @@ baseEnv=Environment()
     
 baseEnv.Tool('generateScript')
 baseEnv.Tool('writePkgList')
+#baseEnv.Tool('writeExternalsList')
 baseEnv.Tool('doxygen')
 baseEnv.Alias('NoTarget')
 baseEnv.SourceCode(".", None)
@@ -79,7 +80,8 @@ AddOption('--source-release', dest='sourceRelease', nargs=1, type='string', acti
 AddOption('--devel-release', dest='develRelease', nargs=1, type='string', action='store', metavar='FILE', help='Creates a compressed developer release and stires it in FILE')
 AddOption('--doxygen', dest='doxygenOutput', nargs=1, type='string', default='${HTML-OUTPUT}', action='store', metavar='DIRECTORY', help='Sets up Doxygen configuration to write html in DIRECTORY')
 AddOption('--containerName', dest='containerName', nargs=1, type='string', action='store', help='Name of the package you are building (i.e. GlastRelease, ScienceTools, etc).  Only used for creating the distribution files')
-
+AddOption('--externalsList', action='store_true',
+          help='request file of external names and versions, written to CONTAINERNAME.extList in data dir')
 
 
 if baseEnv.GetOption('cc'):
@@ -258,13 +260,12 @@ supersedeSettingsDir = '#/' + myVars['myPrefix'] + 'containerSettings'
 #########################
 #  External Libraries   #
 #########################
-##allExternals = SConscript(os.path.join('SConsShared','allExternals.scons'))
 allExternals = SConscript('allExternals.scons')
     
 usedExternals = SConscript(os.path.join(baseSettingsDir, 'externals.scons'),
                            exports = 'allExternals')
-#SConscript(os.path.join('SConsShared', 'processExternals.scons'), exports = 'allExternals usedExternals')
-SConscript('processExternals.scons', exports = 'allExternals usedExternals')
+
+configuredExternals = SConscript('processExternals.scons', exports = 'allExternals usedExternals')
 
 
 ############################
@@ -276,6 +277,14 @@ if os.path.exists(pkgScons):
 else:
     pkgScons = os.path.join(baseSettingsDir, 'package.scons')
     SConscript(pkgScons, exports='pkgScons')
+
+if baseEnv.GetOption('externalsList'):
+    extEnv = Environment(configuredExternals=configuredExternals)
+    extEnv.Tool('writeExternalsList')
+    externalsList = extEnv.GenerateExternalsList(target=os.path.join(str(baseEnv['DATADIR']), str(baseEnv['CONTAINERNAME'])), source = [])
+    Default(externalsList)
+
+    Return()
 
 def listFiles(files, **kw):
     allFiles = []
@@ -395,7 +404,6 @@ if not baseEnv.GetOption('help'):
 	except Exception, inst:
 	    print "scons: Skipped "+pkg.lstrip(override+os.sep)+" because of exceptions: "+str(inst)
 	    traceback.print_tb(sys.exc_info()[2])
-
 
     if not override == '.':
         superList = baseEnv.GeneratePkgList(os.path.join(str(baseEnv['DATADIR']), 'supersede'), [])

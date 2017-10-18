@@ -366,19 +366,25 @@ Export('externalPaths')
 
 #Check if all external libraries exist
 for configuredExternal in configuredExternals:
-    if not baseEnv.GetOption('help') and not baseEnv.GetOption('clean'):
+    if not baseEnv.GetOption('help') and not baseEnv.GetOption('clean') and not (baseEnv.GetOption('externalsList') == True):
         checkEnvironment(configuredExternal)
 
 #If in RM mode print out all the external library ld paths
-if baseEnv.GetOption('rm'):
+if baseEnv.GetOption('rm') or baseEnv.GetOption('externalsList'):
     print "scons: printing external libraries"
     for configuredExternal in configuredExternals:
-        if 'ld-path' in configuredExternal:
-            pth = 'ld-path'
-        elif 'bin-path' in configuredExternal:
-            pth = 'bin-path'
+        if baseEnv.GetOption('rm'):
+            if 'ld-path' in configuredExternal:
+                pth = 'ld-path'
+            elif 'bin-path' in configuredExternal:
+                pth = 'bin-path'
+            else:
+                pth = 'top'
+
+            print configuredExternal['name']+' '+configuredExternal['version']+' '+configuredExternal[pth].replace(baseEnv['GLASTEXTvalue'], '$GLAST_EXT')
         else:
-            pth = 'top'
-        print configuredExternal['name']+' '+configuredExternal['version']+' '+configuredExternal[pth].replace(baseEnv['GLASTEXTvalue'], '$GLAST_EXT')
+            print configuredExternal['name']+' '+configuredExternal['version']
     print "scons: done printing external libraries"
+
+Return("configuredExternals")
     
