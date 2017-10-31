@@ -133,8 +133,12 @@ override = baseEnv.GetOption('supersede')
 if override == '#':
     SConsignFile(os.path.join('..',platBrief , '.sconsign.dblite'))
 else:
-    SConsignFile(os.path.join(os.path.join(override, '..', platBrief) , '.sconsign.dblite'))
-outputRoot = os.path.join(override, '..')
+    SConsignFile(os.path.join(os.path.join(override, platBrief) , '.sconsign.dblite'))
+if override=="#":
+    outputRoot = os.path.join(override, '..')
+else:
+    outputRoot = override
+    baseRoot = os.path.join('#', '..')
 baseEnv['VARIANT'] = variant
 baseEnv['PLATBRIEF'] = platBrief
 Export('baseEnv')
@@ -174,6 +178,10 @@ baseEnv.Append(DATADIR        = Dir(outputRoot).Dir('data'))
 baseEnv.Append(XMLDIR         = Dir(outputRoot).Dir('xml'))
 baseEnv.Append(JODIR          = Dir(outputRoot).Dir('jobOptions'))
 baseEnv.Append(TOOLDIR        = Dir(outputRoot).Dir('sconsTools'))
+
+if override != '#':
+    baseEnv.Append(toolpath=[os.path.join(baseRoot, 'sconsTools')])
+
 baseEnv.Append(TESTDIR        = baseEnv['BINDIR'])
 baseEnv.Append(TESTSCRIPTDIR  = baseEnv['SCRIPTDIR'])
 baseEnv.Append(PYTHONDIR      = Dir(outputRoot).Dir('python'))
@@ -187,11 +195,19 @@ baseEnv.Append(CPPPATH = ['.'])
 baseEnv.Append(CPPPATH = ['src'])
 baseEnv.Append(CPPPATH = [baseEnv['INCDIR']])
 baseEnv.Append(LIBPATH = [baseEnv['LIBDIR']])
-baseEnv.AppendUnique(CPPPATH = os.path.join(os.path.abspath('.'),'include'))
-if 'NO_VARIANT' in baseEnv:
-    baseEnv.AppendUnique(LIBPATH = os.path.join(os.path.abspath('.'),'lib'))
-else:
-    baseEnv.AppendUnique(LIBPATH = os.path.join(os.path.abspath('.'),'lib',variant))
+if override != '#':
+    baseEnv.Append(CPPPATH  = [os.path.join(baseRoot, 'include')]  )
+    if 'NO_VARIANT' in baseEnv:
+        baseEnv.Append(LIBPATH = [os.path.join(baseRoot, 'lib')] )
+    else:
+        baseEnv.Append(LIBPATH = [os.path.join(baseRoot, 'lib', variant)] )
+
+# These may be contributing the paths containing SConsShared
+#baseEnv.AppendUnique(CPPPATH = os.path.join(os.path.abspath('.'),'include'))
+#if 'NO_VARIANT' in baseEnv:
+#    baseEnv.AppendUnique(LIBPATH = os.path.join(os.path.abspath('.'),'lib'))
+#else:
+#    baseEnv.AppendUnique(LIBPATH = os.path.join(os.path.abspath('.'),'lib',variant))
               
 ##################
 # Create release #
@@ -351,7 +367,8 @@ if not baseEnv.GetOption('help'):
 
     #if not override == '.':
     if not override == '#':
-        SCons.Tool.DefaultToolpath.append(os.path.abspath(str(Dir('.').Dir('sconsTools'))))
+        #SCons.Tool.DefaultToolpath.append(os.path.abspath(str(Dir('.').Dir('sconsTools'))))
+        SCons.Tool.DefaultToolpath.append(os.path.abspath(str(Dir(override).Dir('sconsTools'))))
 
     Export('packages')
     baseEnv['packageNameList'] = packages

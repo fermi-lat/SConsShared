@@ -14,4 +14,13 @@ or
 where "the-target" may be "all", a package name, etc.   The special target
 "NoTarget" may be used to see if SConscripts, etc., pass syntax check
 without actually building anything.
+
+To use --supersede, checkout a base release, say under directory base_root
+Create your supersede directory, say super_root and clone packages you need to work on there.
+
+To build, cd to base_root and issue command similar to above except with --supersede option, e.g.
+
+   scons -C ScienceTools_User-scons --site-dir=../SConsShared/site_scons --with-GLAST-EXT=$GLAST_EXT --supersede=full-abspath-to-super_root  the-target
+
+
  
