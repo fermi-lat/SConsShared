@@ -18,9 +18,14 @@ without actually building anything.
 To use --supersede, checkout a base release, say under directory base_root
 Create your supersede directory, say super_root and clone packages you need to work on there.
 
-To build, cd to base_root and issue command similar to above except with --supersede option, e.g.
+To build, issue command similar to above except with --supersede option, e.g.
 
+if current working directory is base root
    scons -C ScienceTools_User-scons --site-dir=../SConsShared/site_scons --with-GLAST-EXT=$GLAST_EXT --supersede=full-abspath-to-super_root  the-target
+
+or, if working directory is somewhere else
+
+   scons -C full-abspath-to-base-root/ScienceTools_User-scons --site-dir=../SConsShared/site_scons --with-GLAST-EXT=$GLAST_EXT --supersede=full-abspath-to-super_root  the-target
 
 
  
