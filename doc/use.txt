@@ -1,0 +1,17 @@
+To use SCons to build a superpackage 
+* make or go to a top level directory, say my_root
+* Populate with packages, e.g. use repoman with a call like
+    repoman checkout ScienceTools_User-scons 
+or
+    repoman checkout ScienceTools_User-scons  GRINF-79
+(GRINF-79 is a branch in ScienceTools_User repo)
+   
+* set environment variable GLAST_EXT appropriately (not necessary,
+  but may be more convenient than typing path in SCons command)
+* build a target like this:
+   scons -C ScienceTools_User-scons --site-dir=../SConsShared/site_scons --with-GLAST-EXT=$GLAST_EXT  the-target
+
+where "the-target" may be "all", a package name, etc.   The special target
+"NoTarget" may be used to see if SConscripts, etc., pass syntax check
+without actually building anything.
+ 
