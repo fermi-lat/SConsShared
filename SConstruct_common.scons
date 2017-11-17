@@ -23,6 +23,7 @@ baseEnv=Environment()
     
 baseEnv.Tool('generateScript')
 baseEnv.Tool('writePkgList')
+#baseEnv.Tool('writeExternalsList')
 baseEnv.Tool('doxygen')
 baseEnv.Alias('NoTarget')
 baseEnv.SourceCode(".", None)
@@ -79,7 +80,8 @@ AddOption('--source-release', dest='sourceRelease', nargs=1, type='string', acti
 AddOption('--devel-release', dest='develRelease', nargs=1, type='string', action='store', metavar='FILE', help='Creates a compressed developer release and stires it in FILE')
 AddOption('--doxygen', dest='doxygenOutput', nargs=1, type='string', default='${HTML-OUTPUT}', action='store', metavar='DIRECTORY', help='Sets up Doxygen configuration to write html in DIRECTORY')
 AddOption('--containerName', dest='containerName', nargs=1, type='string', action='store', help='Name of the package you are building (i.e. GlastRelease, ScienceTools, etc).  Only used for creating the distribution files')
-
+AddOption('--externalsList', action='store_true',
+          help='request file of external names and versions, written to CONTAINERNAME.extList in data dir')
 
 
 if baseEnv.GetOption('cc'):
@@ -131,8 +133,12 @@ override = baseEnv.GetOption('supersede')
 if override == '#':
     SConsignFile(os.path.join('..',platBrief , '.sconsign.dblite'))
 else:
-    SConsignFile(os.path.join(os.path.join(override, '..', platBrief) , '.sconsign.dblite'))
-outputRoot = os.path.join(override, '..')
+    SConsignFile(os.path.join(os.path.join(override, platBrief) , '.sconsign.dblite'))
+if override=="#":
+    outputRoot = os.path.join(override, '..')
+else:
+    outputRoot = override
+    baseRoot = os.path.join('#', '..')
 baseEnv['VARIANT'] = variant
 baseEnv['PLATBRIEF'] = platBrief
 Export('baseEnv')
@@ -172,6 +178,10 @@ baseEnv.Append(DATADIR        = Dir(outputRoot).Dir('data'))
 baseEnv.Append(XMLDIR         = Dir(outputRoot).Dir('xml'))
 baseEnv.Append(JODIR          = Dir(outputRoot).Dir('jobOptions'))
 baseEnv.Append(TOOLDIR        = Dir(outputRoot).Dir('sconsTools'))
+
+if override != '#':
+    baseEnv.Append(toolpath=[os.path.join(baseRoot, 'sconsTools')])
+
 baseEnv.Append(TESTDIR        = baseEnv['BINDIR'])
 baseEnv.Append(TESTSCRIPTDIR  = baseEnv['SCRIPTDIR'])
 baseEnv.Append(PYTHONDIR      = Dir(outputRoot).Dir('python'))
@@ -185,11 +195,19 @@ baseEnv.Append(CPPPATH = ['.'])
 baseEnv.Append(CPPPATH = ['src'])
 baseEnv.Append(CPPPATH = [baseEnv['INCDIR']])
 baseEnv.Append(LIBPATH = [baseEnv['LIBDIR']])
-baseEnv.AppendUnique(CPPPATH = os.path.join(os.path.abspath('.'),'include'))
-if 'NO_VARIANT' in baseEnv:
-    baseEnv.AppendUnique(LIBPATH = os.path.join(os.path.abspath('.'),'lib'))
-else:
-    baseEnv.AppendUnique(LIBPATH = os.path.join(os.path.abspath('.'),'lib',variant))
+if override != '#':
+    baseEnv.Append(CPPPATH  = [os.path.join(baseRoot, 'include')]  )
+    if 'NO_VARIANT' in baseEnv:
+        baseEnv.Append(LIBPATH = [os.path.join(baseRoot, 'lib')] )
+    else:
+        baseEnv.Append(LIBPATH = [os.path.join(baseRoot, 'lib', variant)] )
+
+# These may be contributing the paths containing SConsShared
+#baseEnv.AppendUnique(CPPPATH = os.path.join(os.path.abspath('.'),'include'))
+#if 'NO_VARIANT' in baseEnv:
+#    baseEnv.AppendUnique(LIBPATH = os.path.join(os.path.abspath('.'),'lib'))
+#else:
+#    baseEnv.AppendUnique(LIBPATH = os.path.join(os.path.abspath('.'),'lib',variant))
               
 ##################
 # Create release #
@@ -258,13 +276,12 @@ supersedeSettingsDir = '#/' + myVars['myPrefix'] + 'containerSettings'
 #########################
 #  External Libraries   #
 #########################
-##allExternals = SConscript(os.path.join('SConsShared','allExternals.scons'))
 allExternals = SConscript('allExternals.scons')
     
 usedExternals = SConscript(os.path.join(baseSettingsDir, 'externals.scons'),
                            exports = 'allExternals')
-#SConscript(os.path.join('SConsShared', 'processExternals.scons'), exports = 'allExternals usedExternals')
-SConscript('processExternals.scons', exports = 'allExternals usedExternals')
+
+configuredExternals = SConscript('processExternals.scons', exports = 'allExternals usedExternals')
 
 
 ############################
@@ -276,6 +293,14 @@ if os.path.exists(pkgScons):
 else:
     pkgScons = os.path.join(baseSettingsDir, 'package.scons')
     SConscript(pkgScons, exports='pkgScons')
+
+if baseEnv.GetOption('externalsList'):
+    extEnv = Environment(configuredExternals=configuredExternals)
+    extEnv.Tool('writeExternalsList')
+    externalsList = extEnv.GenerateExternalsList(target=os.path.join(str(baseEnv['DATADIR']), str(baseEnv['CONTAINERNAME'])), source = [])
+    Default(externalsList)
+
+    Return()
 
 def listFiles(files, **kw):
     allFiles = []
@@ -342,7 +367,8 @@ if not baseEnv.GetOption('help'):
 
     #if not override == '.':
     if not override == '#':
-        SCons.Tool.DefaultToolpath.append(os.path.abspath(str(Dir('.').Dir('sconsTools'))))
+        #SCons.Tool.DefaultToolpath.append(os.path.abspath(str(Dir('.').Dir('sconsTools'))))
+        SCons.Tool.DefaultToolpath.append(os.path.abspath(str(Dir(override).Dir('sconsTools'))))
 
     Export('packages')
     baseEnv['packageNameList'] = packages
@@ -396,8 +422,7 @@ if not baseEnv.GetOption('help'):
 	    print "scons: Skipped "+pkg.lstrip(override+os.sep)+" because of exceptions: "+str(inst)
 	    traceback.print_tb(sys.exc_info()[2])
 
-
-    if not override == '.':
+    if not override == '#':
         superList = baseEnv.GeneratePkgList(os.path.join(str(baseEnv['DATADIR']), 'supersede'), [])
         baseEnv.AlwaysBuild([superList])
         baseEnv.Default([superList])

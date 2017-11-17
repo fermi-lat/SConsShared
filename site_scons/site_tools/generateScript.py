@@ -110,7 +110,7 @@ def fillScript(scriptFile, env, wrapper, script, executable):
 
     #if env.GetOption('supersede') != '.':
     if env.GetOption('supersede') != '#':
-	basedirAbs = env.Dir('.').abspath
+	basedirAbs = env.Dir('..').abspath
 	if env['PLATFORM'] == "posix":  # might be nfs path
             basedirAbs = resolve_nfs_path(basedirAbs)
 	##finalScript = finalScript.replace('${REPLACE-BASEDIR}', '"' + basedirAbs+ '"')
