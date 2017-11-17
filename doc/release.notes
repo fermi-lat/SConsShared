@@ -4,6 +4,7 @@
  *
  *                * EOH *
 
+ SConsShared-02-02-00 17-Nov-2017  jrb various adjustments and bug fixes
  SConsShared-02-01-00 08-May-2017    jrb replacement for SConsFiles. Initial tag
  SConsFiles-02-00-00 30-Mar-2017 heather Add in standalone Minuit2
  SConsFiles-01-27-00 14-Sep-2016 heather adding cppunit 1.12.1 for RH7

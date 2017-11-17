@@ -1,7 +1,7 @@
 # -*- python -*-
 # $Header: /nfs/farm/g/glast/u52/cvs_test/cvs/ScienceTools_User-scons/SConsShared/SConstruct_common.scons,v 1.2 2017/07/22 01:27:42 jrb Exp $
 # Authors: Navid Golpayegani <golpa@slac.stanford.edu>, Joanne Bogart <jrb@slac.stanford.edu>
-# Version: SConsShared-01-00-01
+# Version: SConsShared-02-02-00
 
 import os,platform,SCons,glob,re,atexit,sys,traceback,commands,subprocess
 #########################
