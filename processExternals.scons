@@ -1,4 +1,4 @@
-# -*- python -*-                                                                                                                                                                                         
+# -*- python -*-                                                                
 import os, os.path, sys
 from fermidebug import fdebug
 
@@ -366,7 +366,7 @@ Export('externalPaths')
 
 #Check if all external libraries exist
 for configuredExternal in configuredExternals:
-    if not baseEnv.GetOption('help') and not baseEnv.GetOption('clean') and not (baseEnv.GetOption('externalsList') == True):
+    if not baseEnv.GetOption('help') and not baseEnv.GetOption('clean') and not (baseEnv.GetOption('externalsList') ):
         checkEnvironment(configuredExternal)
 
 #If in RM mode print out all the external library ld paths

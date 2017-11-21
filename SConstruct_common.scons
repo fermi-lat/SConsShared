@@ -80,8 +80,9 @@ AddOption('--source-release', dest='sourceRelease', nargs=1, type='string', acti
 AddOption('--devel-release', dest='develRelease', nargs=1, type='string', action='store', metavar='FILE', help='Creates a compressed developer release and stires it in FILE')
 AddOption('--doxygen', dest='doxygenOutput', nargs=1, type='string', default='${HTML-OUTPUT}', action='store', metavar='DIRECTORY', help='Sets up Doxygen configuration to write html in DIRECTORY')
 AddOption('--containerName', dest='containerName', nargs=1, type='string', action='store', help='Name of the package you are building (i.e. GlastRelease, ScienceTools, etc).  Only used for creating the distribution files')
-AddOption('--externalsList', action='store_true',
-          help='request file of external names and versions, written to CONTAINERNAME.extList in data dir')
+
+AddOption('--externalsList', dest='externalsList', action='store', nargs='?', const='externals.extList',
+          help='filename for file of external names and versions to be written to data subdirectory. Defaults to externals.extList if options is supplied without value.  The file will only be written if the command line specifies no (other) target')
 
 
 if baseEnv.GetOption('cc'):
@@ -297,7 +298,9 @@ else:
 if baseEnv.GetOption('externalsList'):
     extEnv = Environment(configuredExternals=configuredExternals)
     extEnv.Tool('writeExternalsList')
-    externalsList = extEnv.GenerateExternalsList(target=os.path.join(str(baseEnv['DATADIR']), str(baseEnv['CONTAINERNAME'])), source = [])
+    #print "calling writeExternalsList with target: "
+    #print os.path.join(str(baseEnv['DATADIR']),baseEnv.GetOption('externalsList'))
+    externalsList = extEnv.GenerateExternalsList(target=os.path.join(str(baseEnv['DATADIR']),baseEnv.GetOption('externalsList')), source = [])
     Default(externalsList)
 
     Return()
@@ -436,11 +439,12 @@ if not baseEnv.GetOption('help'):
 
 
 def print_build_failures():
-    from SCons.Script import GetBuildFailures
-    print "scons: printing failed nodes"
-    for bf in GetBuildFailures():
-        if str(bf.action) != "installFunc(target, source, env)":
-	    print bf.node
-    print "scons: done printing failed nodes"
+    if not baseEnv.GetOption('help'):
+        from SCons.Script import GetBuildFailures
+        print "scons: printing failed nodes"
+        for bf in GetBuildFailures():
+            if str(bf.action) != "installFunc(target, source, env)":
+                print bf.node
+        print "scons: done printing failed nodes"
 
 atexit.register(print_build_failures)
