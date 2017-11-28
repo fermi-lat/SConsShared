@@ -27,5 +27,37 @@ or, if working directory is somewhere else
 
    scons -C full-abspath-to-base-root/ScienceTools_User-scons --site-dir=../SConsShared/site_scons --with-GLAST-EXT=$GLAST_EXT --supersede=full-abspath-to-super_root  the-target
 
+-------
+
+To build tar balls:
+
+Source tarball, essentially the same as repoman checkout
+[jrb@rhel6-64d STR_root]$ scons -C ScienceTools-scons --site-dir=../SConsShared/site_scons --source-release=/nfs/farm/g/lsst/u/jrb/fermi/STR_root/src.tar.gz
+
+User tarball.  Includes final build products but *not* source
+[jrb@rhel6-64d STR_root]$ scons -C ScienceTools-scons --site-dir=../SConsShared/site_scons --user-release=/nfs/farm/g/lsst/u/jrb/fermi/STR_root/usr.tar.gz
+
+Developer tarball.  Union of the above
+[jrb@rhel6-64d STR_root]$ scons -C ScienceTools-scons --site-dir=../SConsShared/site_scons --devel-release=/nfs/farm/g/lsst/u/jrb/fermi/STR_root/devel.tar.gz
+
+In all cases the option (e.g. --devel-release) must have a value and it's best to use an absolute path. Otherwise it's likely to end up relative to SConsShared package directory.
+
+Here are the results for ScienceTools:
+[jrb@rhel6-64d STR_root]$ ls -lh *.tar.gz
+-rw-rw-r-- 1 jrb ey 350M Nov 21 18:50 devel.tar.gz
+-rw-rw-r-- 1 jrb ey 112M Nov 21 18:44 src.tar.gz
+-rw-rw-r-- 1 jrb ey 238M Nov 21 18:46 usr.tar.gz
+
+------
+
+To create externals list:
+[jrb@rhel6-64d STR_root]$ scons -C ScienceTools-scons --site-dir=../SConsShared/site_scons --externalsList=myExtList.txt
+
+produces file myExtList.txt in the data subdirectory.
+
+If --externalsList is used without a value the file will be called 
+externals.extList
+
+
 
  

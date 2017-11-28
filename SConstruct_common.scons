@@ -1,7 +1,7 @@
 # -*- python -*-
 # $Header: /nfs/farm/g/glast/u52/cvs_test/cvs/ScienceTools_User-scons/SConsShared/SConstruct_common.scons,v 1.2 2017/07/22 01:27:42 jrb Exp $
 # Authors: Navid Golpayegani <golpa@slac.stanford.edu>, Joanne Bogart <jrb@slac.stanford.edu>
-# Version: SConsShared-02-02-00
+# Version: SConsShared-02-03-00
 
 import os,platform,SCons,glob,re,atexit,sys,traceback,commands,subprocess
 #########################
@@ -23,7 +23,6 @@ baseEnv=Environment()
     
 baseEnv.Tool('generateScript')
 baseEnv.Tool('writePkgList')
-#baseEnv.Tool('writeExternalsList')
 baseEnv.Tool('doxygen')
 baseEnv.Alias('NoTarget')
 baseEnv.SourceCode(".", None)
@@ -75,13 +74,14 @@ AddOption('--cxxflags', dest='cxxflags', action='store', nargs=1, type='string',
 AddOption('--variant', dest='variant', action='store', nargs=1, type='string', help='The variant to use instead of the computed one')
 AddOption('--supersede', dest='supersede', action='store', nargs=1, type='string', default='#', metavar='DIR', help='Directory containing packages superseding installed ones. Relative paths not supported!')
 AddOption('--exclude', dest='exclude', action='append', nargs=1, type='string', metavar='DIR', help='Directory containing a SConscript file that should be ignored.')
-AddOption('--user-release', dest='userRelease', nargs=1, type='string', action='store', metavar='FILE', help='Creates a compressed user release and stores it in FILE')
-AddOption('--source-release', dest='sourceRelease', nargs=1, type='string', action='store', metavar='FILE', help='Creates a compressed source release and stores it in FILE')
-AddOption('--devel-release', dest='develRelease', nargs=1, type='string', action='store', metavar='FILE', help='Creates a compressed developer release and stires it in FILE')
+AddOption('--user-release', dest='userRelease', nargs=1, type='string', action='store', metavar='FILE', help='Creates a compressed user release and stores it in FILE, which should be specified with absolute path')
+AddOption('--source-release', dest='sourceRelease', nargs=1, type='string', action='store', metavar='FILE', help='Creates a compressed source release and stores it in FILE, which should be specified with absolute path')
+AddOption('--devel-release', dest='develRelease', nargs=1, type='string', action='store', metavar='FILE', help='Creates a compressed developer release and stires it in FILE, which should be specified with absolute path')
 AddOption('--doxygen', dest='doxygenOutput', nargs=1, type='string', default='${HTML-OUTPUT}', action='store', metavar='DIRECTORY', help='Sets up Doxygen configuration to write html in DIRECTORY')
 AddOption('--containerName', dest='containerName', nargs=1, type='string', action='store', help='Name of the package you are building (i.e. GlastRelease, ScienceTools, etc).  Only used for creating the distribution files')
-AddOption('--externalsList', action='store_true',
-          help='request file of external names and versions, written to CONTAINERNAME.extList in data dir')
+
+AddOption('--externalsList', dest='externalsList', action='store', nargs='?', const='externals.extList',
+          help='filename for file of external names and versions to be written to data subdirectory. Defaults to externals.extList if options is supplied without value.  The file will only be written if the command line specifies no (other) target')
 
 
 if baseEnv.GetOption('cc'):
@@ -179,6 +179,10 @@ baseEnv.Append(XMLDIR         = Dir(outputRoot).Dir('xml'))
 baseEnv.Append(JODIR          = Dir(outputRoot).Dir('jobOptions'))
 baseEnv.Append(TOOLDIR        = Dir(outputRoot).Dir('sconsTools'))
 
+# Output directories for "normal" targets
+products = ['bin', 'lib', 'exe', 'sconsTools', 'include', 'xml', 'data', 'jobOptions', 'python', 'syspfiles']
+
+
 if override != '#':
     baseEnv.Append(toolpath=[os.path.join(baseRoot, 'sconsTools')])
 
@@ -212,47 +216,29 @@ if override != '#':
 ##################
 # Create release #
 ##################
-baseEnv['TARFLAGS']='-c'
+#baseEnv['TARFLAGS']='-c'
 if baseEnv.GetOption('userRelease'):
-    baseEnv['TARFLAGS']+=' -z'
-    baseEnv.Default(baseEnv.Tar(baseEnv.GetOption('userRelease'), baseEnv['LIBDIR']))
-    baseEnv.Tar(baseEnv.GetOption('userRelease'), baseEnv['BINDIR'])
-    baseEnv.Tar(baseEnv.GetOption('userRelease'), baseEnv['SCRIPTDIR'])
-    baseEnv.Tar(baseEnv.GetOption('userRelease'), baseEnv['INCDIR'])
-    if (baseEnv.GetOption('containerName') != 'GlastRelease') and (baseEnv.GetOption('containerName') != 'TMineExt'):
-        baseEnv.Tar(baseEnv.GetOption('userRelease'), baseEnv['PFILESDIR'])
-
-    baseEnv.Tar(baseEnv.GetOption('userRelease'), baseEnv['DATADIR'])
-    if baseEnv.GetOption('containerName') == 'GlastRelease':
-        baseEnv.Tar(baseEnv.GetOption('userRelease'), baseEnv['JODIR'])
-
-    baseEnv.Tar(baseEnv.GetOption('userRelease'), baseEnv['TOOLDIR'])
-    baseEnv.Tar(baseEnv.GetOption('userRelease'), baseEnv['TESTDIR'])
-    baseEnv.Tar(baseEnv.GetOption('userRelease'), baseEnv['TESTSCRIPTDIR'])
-    baseEnv.Tar(baseEnv.GetOption('userRelease'), baseEnv['PYTHONDIR'])
-    if (baseEnv.GetOption('containerName') != 'TMineExt'):
-        baseEnv.Tar(baseEnv.GetOption('userRelease'), baseEnv['XMLDIR'])
+    baseEnv.Tool('makeRelease')
+    baseEnv['products'] = products
+    
+    baseEnv['RELEASE_TYPE'] = 'user'
+    baseEnv.Default(baseEnv.GenerateReleaseTarball(target=baseEnv.GetOption('userRelease'),source = [baseEnv['LIBDIR'], baseEnv['SCRIPTDIR'], baseEnv['BINDIR']]))
     Return()
-
 if baseEnv.GetOption('sourceRelease'):
-    baseEnv['TARFLAGS']+=' -z'
-    for exclude in (baseEnv['BINDIR'].path, baseEnv['SCRIPTDIR'].path,
-                    baseEnv['TOOLDIR'].path, baseEnv['TESTDIR'].path,
-                    baseEnv['TESTSCRIPTDIR'].path, 
-                    baseEnv['LIBDIR'].path, 'build','"*.tar.gz"'):
-        baseEnv['TARFLAGS']+=' --exclude '+exclude
+    baseEnv.Tool('makeRelease')
+    baseEnv['products'] = products
 
-    baseEnv.Default(baseEnv.Tar(baseEnv.GetOption('sourceRelease'), glob.glob('*')))
+    baseEnv['RELEASE_TYPE'] = 'source'
+    baseEnv.Default(baseEnv.GenerateReleaseTarball(target=baseEnv.GetOption('sourceRelease'), source=[]))
     Return()
-
 if baseEnv.GetOption('develRelease'):
-    baseEnv['TARFLAGS'] += ' -z'
-    baseEnv['TARFLAGS'] += ' --exclude build'
-    gzs = ''
-    for x in glob.glob('*.tar.gz'): gzs += ' --exclude ' + str(x)
-    baseEnv['TARFLAGS'] +=  gzs
-    baseEnv.Default(baseEnv.Tar(baseEnv.GetOption('develRelease'), glob.glob('*')))
+    baseEnv.Tool('makeRelease')
+    baseEnv['products'] = products
+
+    baseEnv['RELEASE_TYPE'] = 'devel'
+    baseEnv.Default(baseEnv.GenerateReleaseTarball(target=baseEnv.GetOption('develRelease'), source=[baseEnv['LIBDIR'], baseEnv['SCRIPTDIR'], baseEnv['BINDIR']]))
     Return()
+
 
 #####################################
 #  Container Settings Directories   #
@@ -297,7 +283,9 @@ else:
 if baseEnv.GetOption('externalsList'):
     extEnv = Environment(configuredExternals=configuredExternals)
     extEnv.Tool('writeExternalsList')
-    externalsList = extEnv.GenerateExternalsList(target=os.path.join(str(baseEnv['DATADIR']), str(baseEnv['CONTAINERNAME'])), source = [])
+    #print "calling writeExternalsList with target: "
+    #print os.path.join(str(baseEnv['DATADIR']),baseEnv.GetOption('externalsList'))
+    externalsList = extEnv.GenerateExternalsList(target=os.path.join(str(baseEnv['DATADIR']),baseEnv.GetOption('externalsList')), source = [])
     Default(externalsList)
 
     Return()
@@ -365,9 +353,8 @@ if not baseEnv.GetOption('help'):
     (directories, packages) = findPackages(override, False)
 
 
-    #if not override == '.':
+
     if not override == '#':
-        #SCons.Tool.DefaultToolpath.append(os.path.abspath(str(Dir('.').Dir('sconsTools'))))
         SCons.Tool.DefaultToolpath.append(os.path.abspath(str(Dir(override).Dir('sconsTools'))))
 
     Export('packages')
@@ -377,12 +364,8 @@ if not baseEnv.GetOption('help'):
 
 # To create _setup anad wrappers
     pfilesSetup = baseEnv.Install(baseEnv['SCRIPTDIR'],
-    ###                                  [os.path.join('SConsShared',
-    ###                                            'shellscripts',
                                   [os.path.join('shellscripts',
                                                 'pfiles_setup.sh'),
-    ###                               os.path.join('SConsShared',
-    ###                                            'shellscripts',
                                    os.path.join('shellscripts',
                                                 'pfiles_setup.csh')])
     
@@ -392,7 +375,6 @@ if not baseEnv.GetOption('help'):
     if  'usePfiles' in baseEnv:
         baseEnv.Depends(setupScript, pfilesSetup)
 
-    #if override != '.':
     if override != '#':
         baseEnv.AlwaysBuild(setupScript)
 
@@ -436,11 +418,12 @@ if not baseEnv.GetOption('help'):
 
 
 def print_build_failures():
-    from SCons.Script import GetBuildFailures
-    print "scons: printing failed nodes"
-    for bf in GetBuildFailures():
-        if str(bf.action) != "installFunc(target, source, env)":
-	    print bf.node
-    print "scons: done printing failed nodes"
+    if not baseEnv.GetOption('help'):
+        from SCons.Script import GetBuildFailures
+        print "scons: printing failed nodes"
+        for bf in GetBuildFailures():
+            if str(bf.action) != "installFunc(target, source, env)":
+                print bf.node
+        print "scons: done printing failed nodes"
 
 atexit.register(print_build_failures)
