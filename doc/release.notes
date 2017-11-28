@@ -3,7 +3,8 @@
  * Coordinators: N. Golyapegani, J. Bogart
  *
  *                * EOH *
-
+ 
+ SConsShared-02-03-00 28-Nov-2017  jrb Fix tarballs, improve extlist
  SConsShared-02-02-00 17-Nov-2017  jrb various adjustments and bug fixes
  SConsShared-02-01-00 08-May-2017    jrb replacement for SConsFiles. Initial tag
  SConsFiles-02-00-00 30-Mar-2017 heather Add in standalone Minuit2
