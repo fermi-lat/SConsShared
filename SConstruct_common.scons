@@ -20,7 +20,7 @@ AddOption('--with-cxx', dest='cxx', action='store', nargs=1, type='string', meta
 
 baseEnv=Environment()
 
-    
+
 baseEnv.Tool('generateScript')
 baseEnv.Tool('writePkgList')
 baseEnv.Tool('doxygen')
@@ -63,7 +63,7 @@ if baseEnv['PLATFORM'] == "darwin":
         baseEnv['ARCHNAME'] = '32bit'
     platBrief=variant
 
-	
+
 baseEnv.AppendUnique(CPPDEFINES = ['SCons'])
 
 AddOption('--compile-debug', dest='debug', action='store_true', help='Compile with debug flags')
@@ -71,6 +71,7 @@ AddOption('--compile-opt', dest='opt', action='store_true', help='Compile with o
 AddOption('--rm', dest='rm', action='store_true', help='Enable output helpful for RM output parsing')
 AddOption('--ccflags', dest='ccflags', action='store', nargs=1, type='string', metavar='FLAGS', help='Compiler flags to pass to the C compiler')
 AddOption('--cxxflags', dest='cxxflags', action='store', nargs=1, type='string', metavar='FLAGS', help='Compiler flags to pass to the C++ compiler')
+AddOption('--with-python3', dest='python3', action='store_true', help='Use Python3 interpreter')
 AddOption('--variant', dest='variant', action='store', nargs=1, type='string', help='The variant to use instead of the computed one')
 AddOption('--supersede', dest='supersede', action='store', nargs=1, type='string', default='#', metavar='DIR', help='Directory containing packages superseding installed ones. Relative paths not supported!')
 AddOption('--exclude', dest='exclude', action='append', nargs=1, type='string', metavar='DIR', help='Directory containing a SConscript file that should be ignored.')
@@ -117,11 +118,11 @@ platBrief += "-" + compiler
 if baseEnv.GetOption('debug'):
     baseEnv.AppendUnique(CCFLAGS = '-g')
     variant+="-Debug"
-    
+
 if baseEnv.GetOption('opt'):
     baseEnv.AppendUnique(CCFLAGS = '-O2')
     variant+='-Optimized'
-    
+
 if baseEnv.GetOption('ccflags'):
     baseEnv.AppendUnique(CCFLAGS = baseEnv.GetOption('ccflags'))
 if baseEnv.GetOption('cxxflags'):
@@ -159,7 +160,7 @@ if baseEnv['PLATFORM'] == "posix":
 
 if baseEnv['PLATFORM'] == "darwin":
     baseEnv.AppendUnique(SHLINKFLAGS = ["-Wl,-install_name", "-Wl,${TARGET.file}"])
-        
+
 #########################
 #  Project Environment  #
 #########################
@@ -171,7 +172,7 @@ else:
     baseEnv.Append(LIBDIR         = Dir(outputRoot).Dir('lib').Dir(variant))
     baseEnv.Append(BINDIR         = Dir(outputRoot).Dir('exe').Dir(variant))
     baseEnv.Append(SCRIPTDIR      = Dir(outputRoot).Dir('bin').Dir(variant))
-    
+
 baseEnv.Append(INCDIR         = Dir(outputRoot).Dir('include'))
 baseEnv.Append(PFILESDIR      = Dir(outputRoot).Dir('syspfiles'))
 baseEnv.Append(DATADIR        = Dir(outputRoot).Dir('data'))
@@ -212,7 +213,7 @@ if override != '#':
 #    baseEnv.AppendUnique(LIBPATH = os.path.join(os.path.abspath('.'),'lib'))
 #else:
 #    baseEnv.AppendUnique(LIBPATH = os.path.join(os.path.abspath('.'),'lib',variant))
-              
+
 ##################
 # Create release #
 ##################
@@ -220,7 +221,7 @@ if override != '#':
 if baseEnv.GetOption('userRelease'):
     baseEnv.Tool('makeRelease')
     baseEnv['products'] = products
-    
+
     baseEnv['RELEASE_TYPE'] = 'user'
     baseEnv.Default(baseEnv.GenerateReleaseTarball(target=baseEnv.GetOption('userRelease'),source = [baseEnv['LIBDIR'], baseEnv['SCRIPTDIR'], baseEnv['BINDIR']]))
     Return()
@@ -249,7 +250,7 @@ baseSettingsDir = '#/../' + myVars['myPrefix'] + 'containerSettings'
 #
 #    basePrefix = SConscript('containerPrefix.scons')
 #    baseSettingsDir = basePrefix + baseSettingsDir
-    
+
 supersedeSettingsDir = '#/' + myVars['myPrefix'] + 'containerSettings'
 #if override != '.':
 #    if os.path.exists(os.path.join(override, 'containerPrefix.scons')):
@@ -263,7 +264,7 @@ supersedeSettingsDir = '#/' + myVars['myPrefix'] + 'containerSettings'
 #  External Libraries   #
 #########################
 allExternals = SConscript('allExternals.scons')
-    
+
 usedExternals = SConscript(os.path.join(baseSettingsDir, 'externals.scons'),
                            exports = 'allExternals')
 
@@ -337,14 +338,14 @@ if not baseEnv.GetOption('help'):
             # Check if they contain SConscript and tools
             for name in pruned:
                 package = re.compile('-.*$').sub('',name)
-                if not name in ['build', 'CVS', 'src', 'cmt', 'mgr', 'data', 
+                if not name in ['build', 'CVS', 'src', 'cmt', 'mgr', 'data',
                                 'xml', 'pfiles', 'doc', 'bin', 'lib']:
                     fullpath = os.path.join(directory,name)
                     if os.path.isdir(fullpath):
                         dirs.append(fullpath)
                         if os.path.isfile(os.path.join(fullpath,"SConscript")):
                             pcks.append(fullpath)
-                        if os.path.isfile(os.path.join(fullpath, 
+                        if os.path.isfile(os.path.join(fullpath,
                                                        package+'Lib.py')):
                             if toolAdd:
                                 SCons.Tool.DefaultToolpath.append(os.path.abspath(fullpath))
@@ -368,8 +369,8 @@ if not baseEnv.GetOption('help'):
                                                 'pfiles_setup.sh'),
                                    os.path.join('shellscripts',
                                                 'pfiles_setup.csh')])
-    
-        
+
+
     setupScript = baseEnv.GenerateSetupScript(os.path.join(str(baseEnv['SCRIPTDIR']),
                                                        "_setup"))
     if  'usePfiles' in baseEnv:
@@ -381,12 +382,12 @@ if not baseEnv.GetOption('help'):
     baseEnv.Default(setupScript)
     baseEnv.Alias('all', setupScript)
     baseEnv.Alias('setup', setupScript)
-        
+
     baseEnv['setupTarget'] = setupScript
 
 
-    dup = 1                          # using sym links 
-    
+    dup = 1                          # using sym links
+
     for pkg in packages:
         #print "Processing package ", str(pkg)
         try:
