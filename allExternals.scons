@@ -1176,20 +1176,16 @@ allExternalLibraries = {
                                    'libraries'    : { 'pythonLibs' : [ 'pthread', 'dl', 'm', 'python2.7' ] } }
                    },
                   '3.6.3' :
-                   { 'default' : { 'version'      : '3.6.3',
+                   { 'default' : { 'version'      : '3.6.3-Miniconda3-4.3.31',
                                    'top'          : os.path.join('$GLAST_EXT', '$NAME', '$VERSION'),
-                                   'include-path' : os.path.join('$TOP', 'include', 'python3.6'),
-                                   'lib-path'     : os.path.join('$TOP', 'lib', 'python3.6', 'config'),
+                                   'include-path' : os.path.join('$TOP', 'include', 'python3.6m'),
+                                   'lib-path'     : os.path.join('$TOP', 'lib', 'python3.6', 'config-3.6m-x86_64-linux-gnu'),
                                    'site-path'    : os.path.join('$TOP', 'lib', 'python3.6', 'site-packages'),
                                    'ld-path'      : '$LIB-PATH',
                                    'bin-path'     : os.path.join('$TOP', 'bin'),
                                    'includes'     : [ 'Python.h' ],
-                                   'libraries'    : { 'pythonLibs' : [ 'pthread', 'dl', 'util', 'm', 'python3.6' ] }
-                                 },
-                     'gcc41'   : {'version'      : '3.6.3'
-                                 },
-                     'darwin'  : { 'version'      : '3.6.3',
-                                   'libraries'    : { 'pythonLibs' : [ 'pthread', 'dl', 'm', 'python3.6' ] } }
+                                   'libraries'    : { 'pythonLibs' : [ 'pthread', 'dl', 'util', 'm', 'python3.6m' ] }
+                                 }
                    },
 
 
