@@ -1,4 +1,4 @@
-# -*- python -*-                                                                
+# -*- python -*-
 import os, os.path, sys
 from fermidebug import fdebug
 
@@ -15,7 +15,7 @@ AddOption('--with-GLAST-EXT', dest = 'GLAST-EXT', nargs=1, type='string', action
 def getExternal(name, iversion):
     fdebug('getting external ' + name)
     configuredExternal = allExternals[name][iversion]['default']
-    
+
     #Check for default overrides for OS   (value of PLATFORM)
     if baseEnv['PLATFORM'] in allExternals[name][iversion]:
         fdebug('overriding for PLATFORM ' + str(baseEnv['PLATFORM']))
@@ -28,7 +28,7 @@ def getExternal(name, iversion):
         for section in allExternals[name][iversion][baseEnv['OSNAME']]:
             configuredExternal[section] = allExternals[name][iversion][baseEnv['OSNAME']][section]
 
-    #Check for default overrides for compiler    
+    #Check for default overrides for compiler
     if baseEnv['COMPILERNAME'] in allExternals[name][iversion]:
         fdebug('overriding for COMPILERNAME ' + str(baseEnv['COMPILERNAME']))
         for section in allExternals[name][iversion][baseEnv['COMPILERNAME']]:
@@ -95,11 +95,11 @@ def substituteVars(name, version, configuredExternal):
     #Substitue variables
     for section in configuredExternal:
         if 'lib-path' in configuredExternal:
-            configuredExternal[section]=replace(configuredExternal[section], 
+            configuredExternal[section]=replace(configuredExternal[section],
                                                 '$LIB-PATH',
                                                 configuredExternal['lib-path'])
         if 'bin-path' in configuredExternal:
-            configuredExternal[section]=replace(configuredExternal[section], 
+            configuredExternal[section]=replace(configuredExternal[section],
                                                 '$BIN-PATH',
                                                 configuredExternal['bin-path'])
         if 'top' in configuredExternal:
@@ -113,14 +113,23 @@ def substituteVars(name, version, configuredExternal):
             if extSplit[1] == "":
                 geval = extSplit[0]
             baseEnv['GLASTEXTvalue'] = geval
-            configuredExternal[section] = replace(configuredExternal[section], 
+            configuredExternal[section] = replace(configuredExternal[section],
                                                   '$GLAST_EXT', geval)
-        configuredExternal[section] = replace(configuredExternal[section], 
-                                              '$COMPILER', 
+        if baseEnv.GetOption('CONDA-EXT'):
+            # If CONDA-EXT value has trailing slash, strip it off
+            ceval = baseEnv.GetOption('CONDA-EXT')
+            extSplit = os.path.split(ceval)
+            if extSplit[1] == "":
+                ceval = extSplit[0]
+            baseEnv['CONDAEXTvalue'] = ceval
+            configuredExternal[section] = replace(configuredExternal[section],
+                                                  '$CONDA', ceval)
+        configuredExternal[section] = replace(configuredExternal[section],
+                                              '$COMPILER',
                                               baseEnv['COMPILERNAME'])
-        configuredExternal[section] = replace(configuredExternal[section], 
+        configuredExternal[section] = replace(configuredExternal[section],
                                               '$VERSION', version)
-        configuredExternal[section] = replace(configuredExternal[section], 
+        configuredExternal[section] = replace(configuredExternal[section],
                                               '$NAME', name)
     return configuredExternal
 
@@ -139,11 +148,15 @@ def setupEnvironment(configuredExternal):
         wrapperbin = configuredExternal['bin-path']
         if(baseEnv.GetOption('GLAST-EXT')):
             wrapperbin = wrapperbin.replace(baseEnv['GLASTEXTvalue'], '$GLAST_EXT')
+        if(baseEnv.GetOption('CONDA-EXT')):
+            wrapperbin = wrapperbin.replace(baseEnv['CONDAEXTvalue'], '$CONDA')
         baseEnv.AppendUnique(WRAPPERBINS = [wrapperbin])
     if 'ld-path' in configuredExternal:
         wrapperlib = configuredExternal['ld-path']
         if(baseEnv.GetOption('GLAST-EXT')):
             wrapperlib = wrapperlib.replace(baseEnv['GLASTEXTvalue'], '$GLAST_EXT')
+        if(baseEnv.GetOption('CONDA-EXT')):
+            wrapperlib = wrapperlib.replace(baseEnv['CONDAEXTvalue'], '$CONDA')
         if wrapperlib != "$LIB-PATH":
             baseEnv.AppendUnique(WRAPPERLIBS = [wrapperlib])
 
@@ -158,7 +171,7 @@ def setupEnvironment(configuredExternal):
         for define in configuredExternal['cpp-defines']:
             baseEnv.AppendUnique(CPPDEFINES = [define])
 
-                        
+
 def checkEnvironment(configuredExternal):
     supersede = baseEnv.GetOption('supersede')
     conf = baseEnv.Clone().Configure(conf_dir=os.path.join(supersede,'..',baseEnv['PLATBRIEF']))
@@ -184,7 +197,7 @@ def checkEnvironment(configuredExternal):
             else:
                 print 'yes'
     conf.Finish()
-    
+
 def setupRoot(configuredExternal):
     if 'lib-path' in configuredExternal:
         baseEnv.AppendENVPath('LD_LIBRARY_PATH', [configuredExternal['lib-path']])
@@ -194,6 +207,8 @@ def setupRoot(configuredExternal):
     rootsys = os.path.normpath(os.path.join(configuredExternal['include-path'], '..'))
     if(baseEnv.GetOption('GLAST-EXT')):
         rootsys = rootsys.replace(baseEnv['GLASTEXTvalue'], '$GLAST_EXT')
+    if(baseEnv.GetOption('CONDA-EXT')):
+        rootsys = rootsys.replace(baseEnv['CONDAEXTvalue'], '$CONDA')
     baseEnv['ROOTSYS'] = rootsys
 
     baseEnv.AppendENVPath('PATH', [configuredExternal['bin-path']])
@@ -220,16 +235,16 @@ def setupRoot(configuredExternal):
         # Copy specified includes to corresponding dir. in variant hierarchy.
         # It's needed only for Windows, and only if extra args have been supplied.
         # Only evaluate when build is taking place, not during dependency calculation.
-                      
+
         sources = ''
         for file in source:
             sources += ' '+str(buildlocation.rel_path(file))
-        execute = 'cd '+os.path.join("${TARGET.dir}","..")+ ' && ' 
+        execute = 'cd '+os.path.join("${TARGET.dir}","..")+ ' && '
         execute += os.path.join(configuredExternal['bin-path'], 'rootcint')
         execute += ' -f '
         execute += str(buildlocation.rel_path(target[0]))
         #execute += ' -c'
-        execute += ' -c -p'  
+        execute += ' -c -p'
         execute += root_headers
         execute += sources
         return execute
@@ -243,7 +258,7 @@ def setupRoot(configuredExternal):
         return env.SharedLibrary(program, sources)
 
     baseEnv.AddMethod(RootDynamicLibrary)
-    
+
 def setupSwig(configuredExternal):
     baseEnv.PrependENVPath('PATH', [configuredExternal['bin-path']])
     baseEnv.Tool('swig')
@@ -266,7 +281,7 @@ def setupGaudi(configuredExternal):
         def ComponentLibrary(env, lb, sources, **args):
             env.AppendUnique(SHLINKFLAGS = ['-rdynamic'])
             return env.LoadableModule('lib' + lb, sources, **args)
-        
+
     else:
         #uncomment to see path used by rootmap
         #if sys.platform == 'win32':
@@ -293,12 +308,12 @@ def setupGaudi(configuredExternal):
 
             if env['PLATFORM'] == 'posix' : libpathname = 'LD_LIBRARY_PATH'
             else: libpathname = 'DYLD_LIBRARY_PATH'
-            
+
             orig = ''
             if libpathname in env:
                 orig = str(env[libpathname])
 
-            for p in env['LIBPATH']: 
+            for p in env['LIBPATH']:
                 e = str(p)
 
                 env.PrependENVPath(libpathname, e)
@@ -307,7 +322,7 @@ def setupGaudi(configuredExternal):
             #return Flatten([cmplib, rootmap])
             # Replace above two lines with following to eliminate rootmap
             return Flatten([cmplib])
-        
+
     baseEnv.AddMethod(ComponentLibrary)
 
 def setupPython(configuredExternal):
@@ -329,7 +344,7 @@ def setupObf(configuredExternal):
 
 def setupG4(configuredExternal):
     baseEnv['G4TablesPath'] = configuredExternal['tables-path']
-    
+
 #This variable holds are external library hashes once they are fully configured
 configuredExternals = []
 
@@ -387,4 +402,4 @@ if baseEnv.GetOption('rm') or baseEnv.GetOption('externalsList'):
     print "scons: done printing external libraries"
 
 Return("configuredExternals")
-    
+
