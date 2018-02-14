@@ -9,11 +9,8 @@ Import('baseEnv')
 # Need list of external include paths to append to rootcint commands
 extIncludes = []
 
-AddOption('--with-GLAST-EXT', dest = 'GLAST-EXT', nargs=1, type='string',
-        action='store', metavar='DIR',
-        help='location of GLAST_EXT type directory layout for external libraries')
-AddOption('--conda', dest = 'CONDA', action='store_true',
-        help='flag to indicate conda build. Override normal external version checking and pathing.')
+AddOption('--with-GLAST-EXT', dest = 'GLAST-EXT', nargs=1, type='string', action='store', metavar='DIR',
+          help='location of GLAST_EXT type directory layout for external libraries')
 
 def getExternal(name, iversion):
     fdebug('getting external ' + name)
@@ -97,25 +94,18 @@ def replace(string, variable, substitute):
 def substituteVars(name, version, configuredExternal):
     #Substitue variables
     for section in configuredExternal:
-
-        cnda = baseEnv.GetOption('CONDA')
-
         if 'lib-path' in configuredExternal:
-            nlib = '${PREFIX}/lib' if cnda else configuredExternal['lib-path']
             configuredExternal[section]=replace(configuredExternal[section],
-                                                '$LIB-PATH', nlib)
+                                                '$LIB-PATH',
+                                                configuredExternal['lib-path'])
         if 'bin-path' in configuredExternal:
-            nbin = '${PREFIX}/bin' if cnda else configuredExternal['bin-path']
             configuredExternal[section]=replace(configuredExternal[section],
-                                                '$BIN-PATH', nbin)
+                                                '$BIN-PATH',
+                                                configuredExternal['bin-path'])
         if 'top' in configuredExternal:
-            ntop = '${PREFIX}' if cnda else configuredExternal['top']
             configuredExternal[section]=replace(configuredExternal[section],
-                                                '$TOP', ntop)
-        if 'include-path' in configuredExternal:
-            ninc = '${PREFIX}/include' if cnda else configuredExternal['include-path']
-            configuredExternal[section]=replace(configuredExternal[section],
-                                                'include-path', ninc)
+                                                '$TOP',
+                                                configuredExternal['top'])
         if baseEnv.GetOption('GLAST-EXT'):
             # If GLAST-EXT value has trailing slash, strip it off
             geval = baseEnv.GetOption('GLAST-EXT')
@@ -125,6 +115,15 @@ def substituteVars(name, version, configuredExternal):
             baseEnv['GLASTEXTvalue'] = geval
             configuredExternal[section] = replace(configuredExternal[section],
                                                   '$GLAST_EXT', geval)
+        if baseEnv.GetOption('CONDA-EXT'):
+            # If CONDA-EXT value has trailing slash, strip it off
+            ceval = baseEnv.GetOption('CONDA-EXT')
+            extSplit = os.path.split(ceval)
+            if extSplit[1] == "":
+                ceval = extSplit[0]
+            baseEnv['CONDAEXTvalue'] = ceval
+            configuredExternal[section] = replace(configuredExternal[section],
+                                                  '$CONDA', ceval)
         configuredExternal[section] = replace(configuredExternal[section],
                                               '$COMPILER',
                                               baseEnv['COMPILERNAME'])
@@ -149,11 +148,15 @@ def setupEnvironment(configuredExternal):
         wrapperbin = configuredExternal['bin-path']
         if(baseEnv.GetOption('GLAST-EXT')):
             wrapperbin = wrapperbin.replace(baseEnv['GLASTEXTvalue'], '$GLAST_EXT')
+        if(baseEnv.GetOption('CONDA-EXT')):
+            wrapperbin = wrapperbin.replace(baseEnv['CONDAEXTvalue'], '$CONDA')
         baseEnv.AppendUnique(WRAPPERBINS = [wrapperbin])
     if 'ld-path' in configuredExternal:
         wrapperlib = configuredExternal['ld-path']
         if(baseEnv.GetOption('GLAST-EXT')):
             wrapperlib = wrapperlib.replace(baseEnv['GLASTEXTvalue'], '$GLAST_EXT')
+        if(baseEnv.GetOption('CONDA-EXT')):
+            wrapperlib = wrapperlib.replace(baseEnv['CONDAEXTvalue'], '$CONDA')
         if wrapperlib != "$LIB-PATH":
             baseEnv.AppendUnique(WRAPPERLIBS = [wrapperlib])
 
@@ -204,6 +207,8 @@ def setupRoot(configuredExternal):
     rootsys = os.path.normpath(os.path.join(configuredExternal['include-path'], '..'))
     if(baseEnv.GetOption('GLAST-EXT')):
         rootsys = rootsys.replace(baseEnv['GLASTEXTvalue'], '$GLAST_EXT')
+    if(baseEnv.GetOption('CONDA-EXT')):
+        rootsys = rootsys.replace(baseEnv['CONDAEXTvalue'], '$CONDA')
     baseEnv['ROOTSYS'] = rootsys
 
     baseEnv.AppendENVPath('PATH', [configuredExternal['bin-path']])

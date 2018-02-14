@@ -61,24 +61,15 @@ allExternalLibraries = {
                                  },
                      'vc90-debug' : { 'version' : '2.1.2.2-dbg'}
                     },
-                   '2.1.2.4' :
-                   { 'default' : { 'version'      : '2.1.2.4',
-                                   'top'          : os.path.join('$GLAST_EXT', '$NAME', '$VERSION', '$COMPILER'),
+                   'conda' :
+                   { 'default' : { 'version'      : '',
+                                   'top'          : os.path.join('$CONDA'),
                                    'include-path' : os.path.join('$TOP', 'include'),
                                    'lib-path'     : os.path.join('$TOP', 'lib'),
                                    'ld-path'      : '$LIB-PATH',
                                    'includes'     : [ 'CLHEP/Vector/defs.h' ],
                                    'libraries'    : { 'clhepLibs' : [ 'CLHEP'] }
-                                 },
-                     'vc90-debug' : { 'version' : '2.1.2.4-dbg'},
-                     'conda' : { 'version'      : '2.1.2.4',
-                                  'top'          : '$GLAST_EXT',
-                                  'include-path' : os.path.join('$TOP', 'include'),
-                                  'lib-path'     : os.path.join('$TOP', 'lib'),
-                                  'ld-path'      : '$LIB-PATH',
-                                  'includes'     : [ 'CLHEP/Vector/defs.h' ],
-                                  'libraries'    : { 'clhepLibs' : [ 'CLHEP'] }
-                                }
+                                 }
                     }
 
                  },
@@ -111,7 +102,17 @@ allExternalLibraries = {
                                    'libraries'    : { 'fftwLibs' : ['libfftw3']}
                                    }
                      },
+                   'conda' :
+                   { 'default' : { 'version'      : '3.1.2-gl1',
+                                   'top'          : os.path.join('$CONDA'),
+                                   'include-path' : os.path.join('$TOP', 'include'),
+                                   'lib-path'     : os.path.join('$TOP', 'lib'),
+                                   'ld-path'      : '$LIB-PATH',
+                                   'includes'     : [ 'fftw/fftw3.h' ],
+                                   'libraries'    : { 'fftwLibs' : ['fftw3'] }
+                                 },
                  },
+            },
 
     'cfitsio'  : { 'v3060' :
                    { 'default' : { 'version'      : 'v3060',
@@ -194,10 +195,20 @@ allExternalLibraries = {
                      'win32'   : { 'version'      : 'v3290',
                                    'top'          : os.path.join('$GLAST_EXT', '$NAME', '$VERSION', '$COMPILER'),
                                    'libraries'    : { 'cfitsioLibs' : [ 'cfitsio' ] } },
-                     'vc90-debug' : { 'version' : 'v3290-dbg'}
+                     'vc90-debug' : { 'version' : 'v3290-dbg'},
+
+                   },
+                   'conda' :
+                   { 'default' : { 'version'      : 'v534',
+                                   'top'          : os.path.join('$CONDA'),
+                                   'include-path' : os.path.join('$TOP', 'include'),
+                                   'lib-path'     : os.path.join('$TOP', 'lib'),
+                                   'ld-path'      : '$LIB-PATH',
+                                   'includes'     : [ 'fitsio.h' ],
+                                   'libraries'    : { 'cfitsioLibs' : [ 'cfitsio', 'm' ] }
+                                 },
+
                    }
-
-
                  },
 
     'ape'      : { '2.3-gl1' :
@@ -284,6 +295,17 @@ allExternalLibraries = {
                                    'top'          : os.path.join('$GLAST_EXT', '$NAME', '$VERSION', '$COMPILER'),
                                    'libraries'    : { 'apeLibs' : [ 'apelib' ] } },
                      },
+                   'conda' :
+                   { 'default' : { 'version'      : '2.9',
+                                   'top'          : os.path.join('$CONDA'),
+                                   'include-path' : os.path.join('$TOP', 'include'),
+                                   'lib-path'     : os.path.join('$TOP', 'lib'),
+                                   'ld-path'      : '$LIB-PATH',
+                                   'includes'     : [ 'ape/ape_list.h' ],
+                                   'libraries'    : { 'apeLibs' : [ 'ape_2.9', 'readline', 'termcap' ] }
+                                 },
+                   },
+
                  },
 
     'Minuit2'  : { '5.34.14' :
@@ -295,12 +317,10 @@ allExternalLibraries = {
                                    'includes'     : [ 'Minuit2/Minuit2Minimizer.h' ],
                                    'libraries'    : { 'minuit2Libs' : [ 'Minuit2', 'm'] }
                        }
-                   }
-
-                 },
-    'Minuit2'  : { '5.34.14' :
+                   },
+                   'conda' :
                    { 'default' : { 'version'      : '5.34.14',
-                                   'top'          : os.path.join('$GLAST_EXT', '$NAME', '$VERSION'),
+                                   'top'          : os.path.join('$CONDA'),
                                    'include-path' : os.path.join('$TOP', 'include'),
                                    'lib-path'     : os.path.join('$TOP', 'lib'),
                                    'ld-path'      : '$LIB-PATH',
@@ -310,7 +330,6 @@ allExternalLibraries = {
                    }
 
                  },
-
 
     'ROOT'     : { 'v5.18.00b' :
                    { 'default' : { 'version'      : 'v5.18.00b',
@@ -744,6 +763,25 @@ allExternalLibraries = {
                       'darwin' : { 'dylib-path' : '$LIB-PATH' }
 
 
+                 },
+                    'conda' :
+                    { 'default' : { 'version'      : 'v5.34.34',
+                                    'top'          : os.path.join('$CONDA'),
+                                    'include-path' : os.path.join('$TOP', 'include', 'root'),
+                                    'lib-path'     : os.path.join('$TOP', 'lib', 'root'),
+                                    'ld-path'      : '$LIB-PATH',
+                                    'bin-path'     : os.path.join('$TOP', 'bin'),
+                                    'includes'     : [ 'RVersion.h' ],
+                                    'libraries'    :
+                                    { 'rootLibs'    : [ 'Tree', 'Net', 'Gpad', 'Graf', 'RIO', 'Hist', 'Physics', 'Matrix', 'Core', 'Cint', 'MathCore', 'Thread', 'pthread', 'm', 'dl' ],
+                                      'rootGuiLibs' : [ 'Rint', 'Postscript', 'TreePlayer', 'Tree', 'Net', 'Graf3d', 'Gui', 'HistPainter', 'Gpad' ],
+                                      'minuitLibs'  : [ 'Minuit2', 'Minuit', 'Graf', 'RIO', 'Hist', 'Matrix', 'Core', 'Cint', 'dl' ],
+                                      'rootTMineLibs' : [ 'TreePlayer', 'XMLIO', 'Ged', 'MLP', 'TMVA', 'Rint', 'Html']
+                                    }
+                                  },
+                      'darwin' : { 'dylib-path' : '$LIB-PATH' }
+
+
                  }
                },
 
@@ -761,20 +799,19 @@ allExternalLibraries = {
                    },
                    '1.3.31-i1' :
                    { 'default' : { 'version'    : '1.3.31-gl1',
-                                   'top'          : os.path.join('$GLAST_EXT', '$NAME', '$VERSION'),
+                                   'top'          : os.path.join('$GLAST_EXT', '$NAME', '$VERSION', '$COMPILER'),
                                    'bin-path'   : os.path.join('$TOP','bin'),
                                    'share-path' : os.path.join('$TOP','share', 'swig', '1.3.31'),
                                    'binaries'   : [ 'swig' ]
-                                 },
-                     'gcc34'   : {'version'    : '1.3.31',
-                                   'top'          : os.path.join('$GLAST_EXT', '$NAME', '$VERSION', '$COMPILER'),
-                                  },
-                     'win32'   : {'version'    : '1.3.31',
-                                   'top'          : os.path.join('$GLAST_EXT', '$NAME', '$VERSION', '$COMPILER'),
-                                  'share-path' : os.path.join('$TOP', 'lib'),
-                                   'bin-path'   : '$TOP',
-                                   'binaries'   : [ 'swig.exe' ]
-                                 }
+                               }
+                   },
+                   'conda' :
+                   { 'default' : { 'version'    : '1.3.31-gl1',
+                                   'top'        : os.path.join('$CONDA'),
+                                   'bin-path'   : os.path.join('$TOP','bin'),
+                                   'share-path' : os.path.join('$TOP','share', 'swig', '1.3.31'),
+                                   'binaries'   : [ 'swig' ]
+                               }
                    },
 
                  },
@@ -870,6 +907,17 @@ allExternalLibraries = {
                                    'libraries'    : { 'xercesLibs'  : ['xerces-c', 'pthread'] }
                                  },
                    },
+                   'conda' :
+                   { 'default' : { 'version'      : '3.1.3',
+                                   'top'        : os.path.join('$CONDA'),
+                                   'include-path' : os.path.join('$TOP', 'include'),
+                                   'lib-path'     : os.path.join('$TOP', 'lib'),
+                                   'bin-path'     : os.path.join('$TOP', 'bin'),
+                                   'ld-path'      : '$LIB-PATH',
+                                   'includes'     : [ 'xercesc/util/XercesVersion.hpp' ],
+                                   'libraries'    : { 'xercesLibs'  : ['xerces-c', 'pthread'] }
+                                 },
+                   },
 
 
                  },
@@ -912,6 +960,17 @@ allExternalLibraries = {
                    { 'default' :
                      { 'version'      : '1.12.1',
                        'top'          : os.path.join('$GLAST_EXT', '$NAME', '$VERSION'),
+                       'include-path' : os.path.join('$TOP', 'include'),
+                       'lib-path'     : os.path.join('$TOP', 'lib'),
+                       'ld-path'      : '$LIB-PATH',
+                       'includes'     : [ 'cppunit/ui/text/TextTestRunner.h' ],
+                       'libraries'    : { 'cppunitLibs' : [ 'cppunit', 'dl' ] }
+                       }
+                   },
+                   'conda' :
+                   { 'default' :
+                     { 'version'      : '1.12.1',
+                       'top'        : os.path.join('$CONDA'),
                        'include-path' : os.path.join('$TOP', 'include'),
                        'lib-path'     : os.path.join('$TOP', 'lib'),
                        'ld-path'      : '$LIB-PATH',
@@ -1187,6 +1246,18 @@ allExternalLibraries = {
                                    'libraries'    : { 'pythonLibs' : [ 'pthread', 'dl', 'util', 'm', 'python3.6m' ] }
                                  }
                    },
+                  'conda' :
+                   { 'default' : { 'version'      : 'Anaconda',
+                                   'top'        : os.path.join('$CONDA'),
+                                   'include-path' : os.path.join('$TOP', 'include', 'python2.7'),
+                                   'lib-path'     : os.path.join('$TOP', 'lib', 'python2.7', 'config'),
+                                   'site-path'    : os.path.join('$TOP', 'lib', 'python2.7', 'site-packages'),
+                                   'ld-path'      : '$LIB-PATH',
+                                   'bin-path'     : os.path.join('$TOP', 'bin'),
+                                   'includes'     : [ 'Python.h' ],
+                                   'libraries'    : { 'pythonLibs' : [ 'pthread', 'dl', 'util', 'm', 'python2.7' ] }
+                                 }
+                   },
 
 
                  },
@@ -1238,6 +1309,15 @@ allExternalLibraries = {
                            'libraries' : { 'f2cLibs' : [ 'vcf2c', 'oldnames' ] }
                      }
 
+                   },
+                   'conda':
+                   { 'default': { 'version'      : '3.4-gl4',
+                       'top'          : os.path.join('$CONDA'),
+                       'include-path' : os.path.join('$TOP', 'include'),
+                       'lib-path'     : os.path.join('$TOP', 'lib'),
+                       'ld-path'      : '$LIB-PATH',
+                       'libraries'    : { 'f2cLibs' : ['f2c'] },
+                     }
                    },
                  },
 
@@ -1294,6 +1374,12 @@ allExternalLibraries = {
                                    'top'          : os.path.join('$GLAST_EXT', '$NAME', '$VERSION'),
                                    'cpp-defines' : [ 'extFiles=\\"$VERSION\\"' ]
                                  }
+                   },
+                   'conda' :
+                   { 'default' : { 'version'     : 'v0r16',
+                                    'top'          : os.path.join('$CONDA'),
+                                   'cpp-defines' : [ 'extFiles=\\"$VERSION\\"' ]
+                                 }
                    }
                  },
 
@@ -1324,6 +1410,12 @@ allExternalLibraries = {
                    'v2r1' :
                    { 'default' : { 'version'     : 'v2r1',
                                    'top'         : os.path.join('$GLAST_EXT', '$NAME', '$VERSION'),
+                                   'cpp-defines' : [ 'catalogProducts=\\"$VERSION\\"']
+                                 }
+                   },
+                   'conda' :
+                   { 'default' : { 'version'     : 'v2r1',
+                                   'top'          : os.path.join('$CONDA'),
                                    'cpp-defines' : [ 'catalogProducts=\\"$VERSION\\"']
                                  }
                    }
@@ -1362,6 +1454,12 @@ allExternalLibraries = {
                    'v5r0' :
                    { 'default' : { 'version'     : 'v5r0',
                                    'top'          : os.path.join('$GLAST_EXT', '$NAME', '$VERSION'),
+                                   'cpp-defines' : [ 'diffuseModels=\\"$VERSION\\"' ]
+                                 }
+                   },
+                   'conda' :
+                   { 'default' : { 'version'     : 'v5r0',
+                                   'top'          : os.path.join('$CONDA'),
                                    'cpp-defines' : [ 'diffuseModels=\\"$VERSION\\"' ]
                                  }
                    }
@@ -2912,6 +3010,16 @@ allExternalLibraries = {
                                       'includes'     : [ 'wcslib/wcsconfig.h' ],
                                       'libraries'    : { 'wcslibs' : [ 'libwcs']}
                                       }
+                        },
+                   'conda' :
+                      { 'default' : { 'version'      : '4.25.1-gl1',
+                                      'top'          : os.path.join('$CONDA'),
+                                      'include-path' : os.path.join('$TOP', 'include'),
+                                      'lib-path'     : os.path.join('$TOP', 'lib'),
+                                      'ld-path'      : '$LIB-PATH',
+                                      'includes'     : [ 'wcslib/wcsconfig.h' ],
+                                      'libraries'    : { 'wcslibs' : [ 'libwcs']}
+                                      }
                         }
 
                   },
@@ -2924,7 +3032,17 @@ allExternalLibraries = {
                                       'includes'     : [ 'gsl/gsl_math.h' ],
                                       'libraries'    : { 'gsllibs' : [ 'libgsl', 'libgslcblas']}
                                       }
-                        }
+                        },
+               'conda' :
+               { 'default' : { 'version'      : '1.16',
+                                      'top'          : os.path.join('$CONDA'),
+                               'include-path' : os.path.join('$TOP', 'include'),
+                               'lib-path'     : os.path.join('$TOP', 'lib'),
+                               'ld-path'      : '$LIB-PATH',
+                               'includes'     : [ 'gsl/gsl_math.h' ],
+                               'libraries'    : { 'gsllibs' : [ 'libgsl', 'libgslcblas']}
+                               }
+                 }
               },
     'healpix'  : { '3.20' :
                        { 'default' : { 'version'      : '3.20',
@@ -2951,6 +3069,16 @@ allExternalLibraries = {
                                        'top'          : os.path.join('$GLAST_EXT','$NAME','$VERSION'),
                                        'include-path' : os.path.join('$TOP','src','cxx','basic_gcc','include'),
                                        'lib-path'     : os.path.join('$TOP','src','cxx','basic_gcc','lib'),
+                                       'ld-path'      : '$LIB-PATH',
+                                       'includes'     : [ 'healpix_base.h' ],
+                                       'libraries'    : { 'healpixlibs' : [ 'libhealpix_cxx','libcxxsupport','libfftpack','libsharp','libc_utils']}
+                                       }
+                         },
+                   'conda' :
+                       { 'default' : { 'version'      : '3.30',
+                                       'top'          : os.path.join('$CONDA'),
+                                       'include-path' : os.path.join('$TOP','include','healpix_cxx'),
+                                       'lib-path'     : os.path.join('$TOP','lib'),
                                        'ld-path'      : '$LIB-PATH',
                                        'includes'     : [ 'healpix_base.h' ],
                                        'libraries'    : { 'healpixlibs' : [ 'libhealpix_cxx','libcxxsupport','libfftpack','libsharp','libc_utils']}

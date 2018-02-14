@@ -83,6 +83,9 @@ AddOption('--containerName', dest='containerName', nargs=1, type='string', actio
 
 AddOption('--externalsList', dest='externalsList', action='store', nargs='?', const='externals.extList',
           help='filename for file of external names and versions to be written to data subdirectory. Defaults to externals.extList if options is supplied without value.  The file will only be written if the command line specifies no (other) target')
+AddOption('--conda', dest='CONDA-EXT', nargs=1, type='string', action='store',
+        metavar='DIR',
+        help='Path to conda prefix. Override normal external version checking and pathing.')
 
 
 if baseEnv.GetOption('cc'):
