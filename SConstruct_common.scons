@@ -18,11 +18,16 @@ AddOption('--with-cc', dest='cc', action='store', nargs=1, type='string', metava
 AddOption('--with-cxx', dest='cxx', action='store', nargs=1, type='string', metavar='COMPILER', help='Compiler to user for compiling C++ files')
 
 AddOption('--use-path', dest='usepath', action='store_true', help='Set the PATH env. variable during build to what is currently active')
+AddOption('--rpath', dest='rpath', action='store', nargs=1, type='string', metavar='RPATH', help='Use the specified RPATH')
 
 baseEnv=Environment()
 
 if baseEnv.GetOption('usepath'):
     baseEnv = Environment(ENV = {'PATH': os.environ['PATH']}) 
+
+if baseEnv.GetOption('rpath'):
+    baseEnv.Append(RPATH = baseEnv.Literal(baseEnv.GetOption('rpath')))
+    print(baseEnv['RPATH'])
 
 baseEnv.Tool('generateScript')
 baseEnv.Tool('writePkgList')
