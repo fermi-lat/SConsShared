@@ -780,6 +780,7 @@ allExternalLibraries = {
                                                                             'Graf3d', 'Gui', 'HistPainter', 'Gpad' ],
                                                           'minuitLibs'  : [ 'Minuit2', 'Minuit', 'Graf', 'RIO', 'Hist', 'Matrix',
                                                                             'Core', 'Cint', 'dl' ]
+                                                          }
                                     # 'libraries'    :
                                     # { 'rootLibs'    : [ 'Tree', 'Net', 'Gpad', 'Graf', 'RIO', 'Hist', 'Physics', 'Matrix', 'Core', 'Cint', 'pthread', 'm', 'dl' ],
                                     #   'rootGuiLibs' : [ 'MathCore', 'Thread', 'Rint', 'Postscript', 'TreePlayer', 'Tree', 'Net', 'Graf3d', 'Gui', 'HistPainter', 'Gpad' ],
