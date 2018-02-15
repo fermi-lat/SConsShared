@@ -133,9 +133,9 @@ if baseEnv.GetOption('opt'):
     variant+='-Optimized'
 
 if baseEnv.GetOption('ccflags'):
-    baseEnv.AppendUnique(CCFLAGS = baseEnv.Literal(baseEnv.GetOption('ccflags').strip()))
+    baseEnv.AppendUnique(CCFLAGS = baseEnv.GetOption('ccflags').strip().split(" "))
 if baseEnv.GetOption('cxxflags'):
-    baseEnv.AppendUnique(CXXFLAGS = baseEnv.Literal(baseEnv.GetOption('cxxflags').strip()))
+    baseEnv.AppendUnique(CXXFLAGS = baseEnv.GetOption('cxxflags').strip().split(" "))
 if baseEnv.GetOption('variant'):
     variant = baseEnv.GetOption('variant')
     if variant == "NONE": baseEnv['NO_VARIANT'] = True
