@@ -770,14 +770,22 @@ allExternalLibraries = {
                                     'include-path' : os.path.join('$TOP', 'include', 'root'),
                                     'lib-path'     : os.path.join('$TOP', 'lib', 'root'),
                                     'ld-path'      : '$LIB-PATH',
+                                    'ld-flags'     : ['-Wl,-rpath-link,$LIB-PATH:$LIB-PATH/..']
                                     'bin-path'     : os.path.join('$TOP', 'bin'),
                                     'includes'     : [ 'RVersion.h' ],
-                                    'libraries'    :
-                                    { 'rootLibs'    : [ 'Tree', 'Net', 'Gpad', 'Graf', 'RIO', 'Hist', 'Physics', 'Matrix', 'Core', 'Cint', 'MathCore', 'Thread', 'pthread', 'm', 'dl' ],
-                                      'rootGuiLibs' : [ 'Rint', 'Postscript', 'TreePlayer', 'Tree', 'Net', 'Graf3d', 'Gui', 'HistPainter', 'Gpad' ],
-                                      'minuitLibs'  : [ 'Minuit2', 'Minuit', 'Graf', 'RIO', 'Hist', 'Matrix', 'Core', 'Cint', 'dl' ],
-                                      'rootTMineLibs' : [ 'TreePlayer', 'XMLIO', 'Ged', 'MLP', 'TMVA', 'Rint', 'Html']
-                                    }
+                                    'libraries'    : { 'rootLibs'    : ['Tree', 'Net', 'Gpad', 'Graf', 'RIO', 'Hist',
+                                                                           'Physics', 'Matrix', 'Core', 'Cint','pthread', 'm', 'dl'],
+                                                          'rootGuiLibs' : [ 'MathCore', 'Thread', 'Rint', 'Postscript', 'TreePlayer',
+                                                                            'Tree', 'Net',
+                                                                            'Graf3d', 'Gui', 'HistPainter', 'Gpad' ],
+                                                          'minuitLibs'  : [ 'Minuit2', 'Minuit', 'Graf', 'RIO', 'Hist', 'Matrix',
+                                                                            'Core', 'Cint', 'dl' ]
+                                    # 'libraries'    :
+                                    # { 'rootLibs'    : [ 'Tree', 'Net', 'Gpad', 'Graf', 'RIO', 'Hist', 'Physics', 'Matrix', 'Core', 'Cint', 'pthread', 'm', 'dl' ],
+                                    #   'rootGuiLibs' : [ 'MathCore', 'Thread', 'Rint', 'Postscript', 'TreePlayer', 'Tree', 'Net', 'Graf3d', 'Gui', 'HistPainter', 'Gpad' ],
+                                    #   'minuitLibs'  : [ 'Minuit2', 'Minuit', 'Graf', 'RIO', 'Hist', 'Matrix', 'Core', 'Cint', 'dl' ],
+                                    #   'rootTMineLibs' : [ 'TreePlayer', 'XMLIO', 'Ged', 'MLP', 'TMVA', 'Rint', 'Html']
+                                    # }
                                   },
                       'darwin' : { 'dylib-path' : '$LIB-PATH' }
 
