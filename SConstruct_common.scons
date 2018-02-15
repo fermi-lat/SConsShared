@@ -17,9 +17,12 @@ AddOption('--64bit', dest='bits', action='store_const', const='64', help='Force 
 AddOption('--with-cc', dest='cc', action='store', nargs=1, type='string', metavar='COMPILER', help='Compiler to use for compiling C files')
 AddOption('--with-cxx', dest='cxx', action='store', nargs=1, type='string', metavar='COMPILER', help='Compiler to user for compiling C++ files')
 
+AddOption('--use-path', dest='usepath', action='store_true', help='Set the PATH env. variable during build to what is currently active')
 
 baseEnv=Environment()
 
+if baseEnv.GetOption('usepath'):
+    baseEnv = Environment(ENV = {'PATH': os.environ['PATH']}) 
 
 baseEnv.Tool('generateScript')
 baseEnv.Tool('writePkgList')
@@ -86,7 +89,6 @@ AddOption('--externalsList', dest='externalsList', action='store', nargs='?', co
 AddOption('--conda', dest='CONDA-EXT', nargs=1, type='string', action='store',
         metavar='DIR',
         help='Path to conda prefix. Override normal external version checking and pathing.')
-
 
 if baseEnv.GetOption('cc'):
     baseEnv.Replace(CC = baseEnv.GetOption('cc'))

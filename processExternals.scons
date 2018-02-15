@@ -134,6 +134,7 @@ def substituteVars(name, version, configuredExternal):
     return configuredExternal
 
 def setupEnvironment(configuredExternal):
+    
     #Add Paths to base environment
     if 'include-path' in configuredExternal:
         baseEnv.AppendUnique(CPPPATH = [configuredExternal['include-path']])
@@ -151,6 +152,7 @@ def setupEnvironment(configuredExternal):
         if(baseEnv.GetOption('CONDA-EXT')):
             wrapperbin = wrapperbin.replace(baseEnv['CONDAEXTvalue'], '$CONDA')
         baseEnv.AppendUnique(WRAPPERBINS = [wrapperbin])
+    
     if 'ld-path' in configuredExternal:
         wrapperlib = configuredExternal['ld-path']
         if(baseEnv.GetOption('GLAST-EXT')):
@@ -159,6 +161,18 @@ def setupEnvironment(configuredExternal):
             wrapperlib = wrapperlib.replace(baseEnv['CONDAEXTvalue'], '$CONDA')
         if wrapperlib != "$LIB-PATH":
             baseEnv.AppendUnique(WRAPPERLIBS = [wrapperlib])
+
+    if 'ld-flags' in configuredExternal:
+        for define in configuredExternal['ld-flags']:
+            these_options = define.split(" ")
+            if baseEnv['PLATFORM'] == 'darwin':
+                # Need to check whether openmp is in the options
+                # and remove it in this case, since it is not suppored
+                # on Mac
+                if '-fopenmp' in these_options:
+                    these_options.pop(these_options.index('-fopenmp'))
+            
+            baseEnv.AppendUnique(LINKFLAGS = these_options)
 
     #Add library groups to base environment
     if 'libraries' in configuredExternal:
@@ -196,6 +210,7 @@ def checkEnvironment(configuredExternal):
                 Exit(1);
             else:
                 print 'yes'
+    
     conf.Finish()
 
 def setupRoot(configuredExternal):
