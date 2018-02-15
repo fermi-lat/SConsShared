@@ -214,6 +214,9 @@ def checkEnvironment(configuredExternal):
     conf.Finish()
 
 def setupRoot(configuredExternal):
+    if 'ld-flags' in configuredExternal:
+        for define in configuredExternal['ld-flags']:
+            baseEnv.AppendUnique(LINKFLAGS = define.split(" "))
     if 'lib-path' in configuredExternal:
         baseEnv.AppendENVPath('LD_LIBRARY_PATH', [configuredExternal['lib-path']])
     if 'dylib-path' in configuredExternal:
