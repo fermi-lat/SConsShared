@@ -27,7 +27,6 @@ if baseEnv.GetOption('usepath'):
 
 if baseEnv.GetOption('rpath'):
     baseEnv.Append(RPATH = baseEnv.Literal(baseEnv.GetOption('rpath')))
-    print(baseEnv['RPATH'])
 
 baseEnv.Tool('generateScript')
 baseEnv.Tool('writePkgList')
@@ -134,9 +133,9 @@ if baseEnv.GetOption('opt'):
     variant+='-Optimized'
 
 if baseEnv.GetOption('ccflags'):
-    baseEnv.AppendUnique(CCFLAGS = baseEnv.GetOption('ccflags'))
+    baseEnv.AppendUnique(CCFLAGS = baseEnv.Literal(baseEnv.GetOption('ccflags').strip()))
 if baseEnv.GetOption('cxxflags'):
-    baseEnv.AppendUnique(CXXFLAGS = baseEnv.GetOption('cxxflags'))
+    baseEnv.AppendUnique(CXXFLAGS = baseEnv.Literal(baseEnv.GetOption('cxxflags').strip()))
 if baseEnv.GetOption('variant'):
     variant = baseEnv.GetOption('variant')
     if variant == "NONE": baseEnv['NO_VARIANT'] = True
