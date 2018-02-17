@@ -46,7 +46,7 @@ if baseEnv['PLATFORM'] == "posix":
 
 if baseEnv['PLATFORM'] == "darwin":
     version = commands.getoutput("sw_vers -productVersion")
-    cpu = commands.getoutput("arch")
+    cpu = commands.getoutput("uname -m")
     baseEnv['MACHINENAME'] = cpu
     if version.startswith("10.8"):
         variant="mountainlion-"

@@ -770,7 +770,7 @@ allExternalLibraries = {
                                     'include-path' : os.path.join('$TOP', 'include', 'root'),
                                     'lib-path'     : os.path.join('$TOP', 'lib', 'root'),
                                     'ld-path'      : '$LIB-PATH',
-                                    'ld-flags'     : ['-Wl,-rpath-link,$LIB-PATH:$LIB-PATH/..'],
+                                    'ld-flags'     : ['-Wl,-rpath,$LIB-PATH:$LIB-PATH/..'],
                                     'bin-path'     : os.path.join('$TOP', 'bin'),
                                     'includes'     : [ 'RVersion.h' ],
                                     'libraries'    : { 'rootLibs'    : ['Tree', 'Net', 'Gpad', 'Graf', 'RIO', 'Hist',
