@@ -162,17 +162,17 @@ def setupEnvironment(configuredExternal):
         if wrapperlib != "$LIB-PATH":
             baseEnv.AppendUnique(WRAPPERLIBS = [wrapperlib])
 
-    if 'ld-flags' in configuredExternal:
-        for define in configuredExternal['ld-flags']:
-            these_options = define.split(" ")
-            if baseEnv['PLATFORM'] == 'darwin':
-                # Need to check whether openmp is in the options
-                # and remove it in this case, since it is not suppored
-                # on Mac
-                if '-fopenmp' in these_options:
-                    these_options.pop(these_options.index('-fopenmp'))
-            
-            baseEnv.AppendUnique(LINKFLAGS = these_options)
+#    if 'ld-flags' in configuredExternal:
+#        for define in configuredExternal['ld-flags']:
+#            these_options = define.split(" ")
+#            if baseEnv['PLATFORM'] == 'darwin':
+#                # Need to check whether openmp is in the options
+#                # and remove it in this case, since it is not suppored
+#                # on Mac
+#                if '-fopenmp' in these_options:
+#                    these_options.pop(these_options.index('-fopenmp'))
+#            
+#            baseEnv.AppendUnique(LINKFLAGS = these_options)
 
     #Add library groups to base environment
     if 'libraries' in configuredExternal:

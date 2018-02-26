@@ -18,15 +18,15 @@ AddOption('--with-cc', dest='cc', action='store', nargs=1, type='string', metava
 AddOption('--with-cxx', dest='cxx', action='store', nargs=1, type='string', metavar='COMPILER', help='Compiler to user for compiling C++ files')
 
 AddOption('--use-path', dest='usepath', action='store_true', help='Set the PATH env. variable during build to what is currently active')
-AddOption('--rpath', dest='rpath', action='store', nargs=1, type='string', metavar='RPATH', help='Use the specified RPATH')
+#AddOption('--rpath', dest='rpath', action='store', nargs=1, type='string', metavar='RPATH', help='Use the specified RPATH')
 
 baseEnv=Environment()
 
 if baseEnv.GetOption('usepath'):
     baseEnv = Environment(ENV = {'PATH': os.environ['PATH']}) 
 
-if baseEnv.GetOption('rpath'):
-    baseEnv.Append(RPATH = baseEnv.Literal(baseEnv.GetOption('rpath')))
+#if baseEnv.GetOption('rpath'):
+#    baseEnv.Append(RPATH = baseEnv.Literal(baseEnv.GetOption('rpath')))
 
 baseEnv.Tool('generateScript')
 baseEnv.Tool('writePkgList')
@@ -78,6 +78,7 @@ AddOption('--compile-opt', dest='opt', action='store_true', help='Compile with o
 AddOption('--rm', dest='rm', action='store_true', help='Enable output helpful for RM output parsing')
 AddOption('--ccflags', dest='ccflags', action='store', nargs=1, type='string', metavar='FLAGS', help='Compiler flags to pass to the C compiler')
 AddOption('--cxxflags', dest='cxxflags', action='store', nargs=1, type='string', metavar='FLAGS', help='Compiler flags to pass to the C++ compiler')
+AddOption('--ldflags', dest='ldflags', action='store', nargs=1, type='string', metavar='LINKFLAGS', help="Linker flags (LDFLAGS)")
 AddOption('--with-python3', dest='python3', action='store_true', help='Use Python3 interpreter')
 AddOption('--variant', dest='variant', action='store', nargs=1, type='string', help='The variant to use instead of the computed one')
 AddOption('--supersede', dest='supersede', action='store', nargs=1, type='string', default='#', metavar='DIR', help='Directory containing packages superseding installed ones. Relative paths not supported!')
@@ -136,6 +137,8 @@ if baseEnv.GetOption('ccflags'):
     baseEnv.AppendUnique(CCFLAGS = baseEnv.GetOption('ccflags').strip().split(" "))
 if baseEnv.GetOption('cxxflags'):
     baseEnv.AppendUnique(CXXFLAGS = baseEnv.GetOption('cxxflags').strip().split(" "))
+if baseEnv.GetOption('ldflags'):
+    baseEnv.AppendUnique(LINKFLAGS = baseEnv.GetOption('ldflags').strip().split(" "))
 if baseEnv.GetOption('variant'):
     variant = baseEnv.GetOption('variant')
     if variant == "NONE": baseEnv['NO_VARIANT'] = True

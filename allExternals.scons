@@ -770,7 +770,7 @@ allExternalLibraries = {
                                     'include-path' : os.path.join('$TOP', 'include', 'root'),
                                     'lib-path'     : os.path.join('$TOP', 'lib', 'root'),
                                     'ld-path'      : '$LIB-PATH',
-                                    'ld-flags'     : ['-Wl,-rpath,$LIB-PATH:$LIB-PATH/..'],
+#                                    'ld-flags'     : ['-Wl,-rpath,$LIB-PATH:$LIB-PATH/..'],
                                     'bin-path'     : os.path.join('$TOP', 'bin'),
                                     'includes'     : [ 'RVersion.h' ],
                                     'libraries'    : { 'rootLibs'    : ['Tree', 'Net', 'Gpad', 'Graf', 'RIO', 'Hist',
@@ -3089,7 +3089,7 @@ allExternalLibraries = {
                                        'include-path' : os.path.join('$TOP','include','healpix_cxx'),
                                        'lib-path'     : os.path.join('$TOP','lib'),
                                        'ld-path'      : '$LIB-PATH',
-                                       'ld-flags'     : ['-fopenmp'],
+#                                       'ld-flags'     : ['-fopenmp'],
                                        'includes'     : [ 'healpix_base.h' ],
                                        'libraries'    : { 'healpixlibs' : [ 'libhealpix_cxx','libcxxsupport','libfftpack','libsharp','libc_utils']}
                                        }
