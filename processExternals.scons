@@ -250,7 +250,7 @@ def setupSwig(configuredExternal):
 
     baseEnv.AppendUnique(SWIGPATH = [baseEnv['CPPPATH'], os.path.join(configuredExternal['share-path'], 'python'),
                                      configuredExternal['share-path'], baseEnv['INCDIR'], '.'])
-    swigpy3flg = '-py3' if python3 else ''
+    swigpy3flg = '-py3' if baseEnv.GetOption('python3') else ''
     baseEnv.AppendUnique(SWIGFLAGS = ['-w401', '-w402', '-w503', '-w362', '-w389', '-w509', '-python', '-c++', swigpy3flg])
 
     baseEnv['LDMODULESUFFIX'] = '.so'
