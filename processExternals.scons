@@ -329,9 +329,9 @@ def setupPython(configuredExternal):
     baseEnv['pythonSitePath'] = configuredExternal['site-path']
     if baseEnv['PLATFORM'] == 'darwin':
         baseEnv.AppendUnique(LDMODULEFLAGS = ['-bundle_loader', os.path.join(configuredExternal['bin-path'], 'python')])
-    if configuredExternal['version'] == 'env27':
+    if configuredExternal['version'] == 'env27' and 'PKG_CONFIG_PATH' in os.environ:
         print("Using external PKG_CONFIG_PATH=" + os.environ['PKG_CONFIG_PATH'])
-        baseEnv['ENV']['PKG_CONFIG_PATH']=os.environ['PKG_CONFIG_PATH']
+        baseEnv['ENV']['PKG_CONFIG_PATH'] = os.environ['PKG_CONFIG_PATH']
         baseEnv.ParseConfig('pkg-config python --cflags --libs')
 
 def setupLdf(configuredExternal):
