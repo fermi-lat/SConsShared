@@ -354,6 +354,7 @@ def setupPython(configuredExternal):
     if baseEnv['PLATFORM'] == 'darwin':
         baseEnv.AppendUnique(LDMODULEFLAGS = ['-bundle_loader', os.path.join(configuredExternal['bin-path'], 'python')])
     if not os.path.exists(configuredExternal['site-path']) and 'PKG_CONFIG_PATH' in os.environ:
+        print("No External found: " + configuredExternal['site-path'])
         configuredExternal = getExternal('python', 'env27')
         print("No Python external found... defaulting to system python")
         print("Using external PKG_CONFIG_PATH=" + os.environ['PKG_CONFIG_PATH'])
