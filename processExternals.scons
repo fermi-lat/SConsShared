@@ -329,6 +329,14 @@ def setupPython(configuredExternal):
     baseEnv['pythonSitePath'] = configuredExternal['site-path']
     if baseEnv['PLATFORM'] == 'darwin':
         baseEnv.AppendUnique(LDMODULEFLAGS = ['-bundle_loader', os.path.join(configuredExternal['bin-path'], 'python')])
+    if not os.path.exists(configuredExternal['site-path']) and 'PKG_CONFIG_PATH' in os.environ:
+        print("No External found: " + configuredExternal['site-path'])
+        configuredExternal = getExternal('python', 'env27')
+        print("No Python external found... defaulting to system python")
+        print("Using external PKG_CONFIG_PATH=" + os.environ['PKG_CONFIG_PATH'])
+        baseEnv['ENV']['PKG_CONFIG_PATH'] = os.environ['PKG_CONFIG_PATH']
+        baseEnv.ParseConfig('pkg-config python --cflags --libs')
+    return configuredExternal
 
 def setupLdf(configuredExternal):
     baseEnv['ldfTestPath'] = configuredExternal['test-path']
@@ -363,7 +371,7 @@ for external in usedExternals:
     if external['name'] == 'swig':
         setupSwig(configuredExternal)
     if external['name'] == 'python':
-        setupPython(configuredExternal)
+        configuredExternal = setupPython(configuredExternal)
     if external['name'] == 'ldf':
         setupLdf(configuredExternal)
     if external['name'] == 'obf':

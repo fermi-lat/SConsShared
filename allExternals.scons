@@ -1,5 +1,14 @@
 # -*- python -*-
 import os
+import sys
+
+def getSitePath(default):
+    try:
+        import numpy
+        site_path = os.path.dirname(numpy.__path__[0])
+    except ImportError:
+        site_path = default
+    return site_path
 
 allExternalLibraries = {
     'CLHEP'    : { '1.9.2.2' :
@@ -1252,6 +1261,18 @@ allExternalLibraries = {
                                    'include-path' : os.path.join('$TOP', 'include', 'python2.7'),
                                    'lib-path'     : os.path.join('$TOP', 'lib', 'python2.7', 'config'),
                                    'site-path'    : os.path.join('$TOP', 'lib', 'python2.7', 'site-packages'),
+                                   'ld-path'      : '$LIB-PATH',
+                                   'bin-path'     : os.path.join('$TOP', 'bin'),
+                                   'includes'     : [ 'Python.h' ],
+                                   'libraries'    : { 'pythonLibs' : [ 'pthread', 'dl', 'util', 'm', 'python2.7' ] }
+                                 }
+                   },
+                  'env27' :
+                   { 'default' : { 'version'      : 'env27',
+                                   'top'          : os.path.dirname(os.path.dirname(sys.executable)),
+                                   'include-path' : os.path.join('$TOP', 'include', 'python2.7'),
+                                   'lib-path'     : os.path.join('$TOP', 'lib', 'python2.7', 'config'),
+                                   'site-path'    : getSitePath(os.path.join('$TOP', 'lib', 'python2.7', 'site-packages')),
                                    'ld-path'      : '$LIB-PATH',
                                    'bin-path'     : os.path.join('$TOP', 'bin'),
                                    'includes'     : [ 'Python.h' ],
