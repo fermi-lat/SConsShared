@@ -14,7 +14,7 @@ def generate(env):
         fp = open(str(target[0]), 'w')
         fp.write("# packages belonging to this file hierarchy\n\n")
         for pkg in env['packageNameList']:
-            print("writePkgList: Processing pkg " + pkg)
+            print(("writePkgList: Processing pkg " + pkg))
             fp.write(os.path.basename(str(pkg)))
             fp.write("\n")
         fp.close()

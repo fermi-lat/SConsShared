@@ -43,7 +43,7 @@ def generate(env):
 
         #print 'Args are: ', args
         r = call(args, cwd='../')
-        if r != 0: print "subprocess.call returned ", r
+        if r != 0: print("subprocess.call returned ", r)
 
     def createTarballGenerator(source, target, env, for_signature):
         actions = [env.Action(createTarball, "Creating release tarball")]

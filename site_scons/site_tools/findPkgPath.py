@@ -6,7 +6,7 @@ import os,platform,os.path
 def generate(env, **kw):
     pkgName = kw.get('package', '')
     if pkgName == '': 
-        print 'findPkgPath called with no arg'
+        print('findPkgPath called with no arg')
         return None
     path = None
     subDir = kw.get('subDir', '')
