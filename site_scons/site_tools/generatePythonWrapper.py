@@ -91,7 +91,7 @@ def generate(env, **kw):
         actions = [env.Action(createWrapper,
                               "Creating  wrapper for python files '$TARGETS'")]
         for trgt in target:
-            actions.append(SCons.Defaults.Chmod(trgt, 0755))
+            actions.append(SCons.Defaults.Chmod(trgt, 0o755))
         return actions
 
     #print "Inside generatePythonWrapper::generate"

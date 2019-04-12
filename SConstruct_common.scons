@@ -3,7 +3,7 @@
 # Authors: Navid Golpayegani <golpa@slac.stanford.edu>, Joanne Bogart <jrb@slac.stanford.edu>
 # Version: SConsShared-02-03-00
 
-import os,platform,SCons,glob,re,atexit,sys,traceback,commands,subprocess
+import os,platform,SCons,glob,re,atexit,sys,traceback,subprocess,subprocess
 #########################
 #   Global Environment  #
 #########################
@@ -41,8 +41,8 @@ if baseEnv['PLATFORM'] == "posix":
     platBrief = platform.dist()[0] + platform.dist()[1] + "_" + platform.architecture()[0]
 
 if baseEnv['PLATFORM'] == "darwin":
-    version = commands.getoutput("sw_vers -productVersion")
-    cpu = commands.getoutput("uname -m")
+    version = subprocess.getoutput("sw_vers -productVersion")
+    cpu = subprocess.getoutput("uname -m")
     baseEnv['MACHINENAME'] = cpu
     if version.startswith("10.8"):
         variant="mountainlion-"
@@ -409,8 +409,8 @@ if not baseEnv.GetOption('help'):
                                                               variant),
                                    duplicate=dup, exports='myVars')
 
-	except Exception, inst:
-	    print "scons: Skipped "+pkg.lstrip(override+os.sep)+" because of exceptions: "+str(inst)
+	except Exception as inst:
+	    print(("scons: Skipped "+pkg.lstrip(override+os.sep)+" because of exceptions: "+str(inst)))
 	    traceback.print_tb(sys.exc_info()[2])
 
     if not override == '#':
@@ -429,10 +429,10 @@ if not baseEnv.GetOption('help'):
 def print_build_failures():
     if not baseEnv.GetOption('help'):
         from SCons.Script import GetBuildFailures
-        print "scons: printing failed nodes"
+        print("scons: printing failed nodes")
         for bf in GetBuildFailures():
             if str(bf.action) != "installFunc(target, source, env)":
-                print bf.node
-        print "scons: done printing failed nodes"
+                print((bf.node))
+        print("scons: done printing failed nodes")
 
 atexit.register(print_build_failures)

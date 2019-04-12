@@ -218,7 +218,7 @@ def generate(env):
         for trgt in target:
             if 'setupTarget' in env:
                 env.Depends(trgt, env['setupTarget'])
-            actions.append(SCons.Defaults.Chmod(trgt, 0755))
+            actions.append(SCons.Defaults.Chmod(trgt, 0o755))
         return actions
 
 
@@ -238,7 +238,7 @@ def generate(env):
     def createSetupGenerator(source, target, env, for_signature):
         actions = [env.Action(createSetup, "Creating setup scripts")]
         for trgt in target:
-            actions.append(SCons.Defaults.Chmod(trgt, 0755))
+            actions.append(SCons.Defaults.Chmod(trgt, 0o755))
         return actions
 
     suf = '.sh'

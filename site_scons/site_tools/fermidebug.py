@@ -34,7 +34,7 @@ import os
 logfile = os.environ.get('SCONS_FERMI_DEBUG')
 if logfile == '-':
     def fdebug(x):
-        print x
+        print(x)
 elif logfile:
     try:
         import logging

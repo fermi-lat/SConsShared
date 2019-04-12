@@ -192,24 +192,24 @@ def checkEnvironment(configuredExternal):
     if 'includes' in configuredExternal:
         for include in configuredExternal['includes']:
             if not conf.CheckCXXHeader(include):
-                print 'Unable to find a header file for '+configuredExternal['name']+'. See config.log for more details.'
+                print('Unable to find a header file for '+configuredExternal['name']+'. See config.log for more details.')
                 Exit(1)
     if 'libraries' in configuredExternal:
         for libGroup in configuredExternal['libraries']:
             for library in configuredExternal['libraries'][libGroup][::-1]:
                 library = replace(library, '$COMPILER', baseEnv['COMPILERNAME'])
                 if not conf.CheckLib(library, language='C++'):
-                    print 'Unable to find a library for '+configuredExternal['name']+'. See config.log for more details.'
+                    print('Unable to find a library for '+configuredExternal['name']+'. See config.log for more details.')
                     Exit(1)
     if 'binaries' in configuredExternal:
         for binary in configuredExternal['binaries']:
-            print 'Checking for application '+binary+'... ',
+            print('Checking for application '+binary+'... ', end=' ')
             if not os.path.isfile(os.path.join(configuredExternal['bin-path'], binary)):
-                print 'no'
-                print 'Unable to find binary for '+configuredExternal['name']+'.'
+                print('no')
+                print('Unable to find binary for '+configuredExternal['name']+'.')
                 Exit(1);
             else:
-                print 'yes'
+                print('yes')
     
     conf.Finish()
 
@@ -404,7 +404,7 @@ for configuredExternal in configuredExternals:
 
 #If in RM mode print out all the external library ld paths
 if baseEnv.GetOption('rm') or baseEnv.GetOption('externalsList'):
-    print "scons: printing external libraries"
+    print("scons: printing external libraries")
     for configuredExternal in configuredExternals:
         if baseEnv.GetOption('rm'):
             if 'ld-path' in configuredExternal:
@@ -414,10 +414,10 @@ if baseEnv.GetOption('rm') or baseEnv.GetOption('externalsList'):
             else:
                 pth = 'top'
 
-            print configuredExternal['name']+' '+configuredExternal['version']+' '+configuredExternal[pth].replace(baseEnv['GLASTEXTvalue'], '$GLAST_EXT')
+            print(configuredExternal['name']+' '+configuredExternal['version']+' '+configuredExternal[pth].replace(baseEnv['GLASTEXTvalue'], '$GLAST_EXT'))
         else:
-            print configuredExternal['name']+' '+configuredExternal['version']
-    print "scons: done printing external libraries"
+            print(configuredExternal['name']+' '+configuredExternal['version'])
+    print("scons: done printing external libraries")
 
 Return("configuredExternals")
 

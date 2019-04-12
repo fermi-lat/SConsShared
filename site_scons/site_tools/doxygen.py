@@ -1,5 +1,5 @@
 # -*- python -*-
-import os,re,commands
+import os,re,subprocess
 import SCons.Builder
 import SCons.Action
 from fermidebug import fdebug
