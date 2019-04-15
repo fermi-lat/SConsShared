@@ -114,7 +114,7 @@ if baseEnv.GetOption('bits') == '64':
     baseEnv.AppendUnique(LINKFLAGS = ['-m64'])
 
 
-compiler = b'gcc'+(b'').join(baseEnv['CXXVERSION'].split('.')[0:2])
+compiler = "gcc"+" ".join(baseEnv['CXXVERSION'].split('.')[0:2])
 
 baseEnv['COMPILERNAME'] = compiler
 variant += "-" + compiler
