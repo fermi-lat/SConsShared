@@ -110,12 +110,12 @@ def fillScript(scriptFile, env, wrapper, script, executable):
 
     #if env.GetOption('supersede') != '.':
     if env.GetOption('supersede') != '#':
-	basedirAbs = env.Dir('..').abspath
-	if env['PLATFORM'] == "posix":  # might be nfs path
+        basedirAbs = env.Dir('..').abspath
+        if env['PLATFORM'] == "posix":  # might be nfs path
             basedirAbs = resolve_nfs_path(basedirAbs)
-	##finalScript = finalScript.replace('${REPLACE-BASEDIR}', '"' + basedirAbs+ '"')
+        ##finalScript = finalScript.replace('${REPLACE-BASEDIR}', '"' + basedirAbs+ '"')
         # The " cause problems.  Let's hope we don't need them.
-	finalScript = finalScript.replace('${REPLACE-BASEDIR}', basedirAbs)
+        finalScript = finalScript.replace('${REPLACE-BASEDIR}', basedirAbs)
     else:
         # print "inst is ", inst
         finalScript = finalScript.replace('${REPLACE-BASEDIR}', inst)
@@ -183,7 +183,7 @@ def fillScript(scriptFile, env, wrapper, script, executable):
     finalScript = finalScript.replace('${REPLACE-PYTHONPATHS}', separator.join(pythonPath))
     
     if wrapper > 0:
-        if noVariant:	
+        if noVariant:   
             #finalScript = finalScript.replace('${REPLACE-WRAPPER-SCRIPT}', 'export INST_DIR=`dirname $0`\nexport INST_DIR=`cd $INST_DIR/../; pwd`\n')
             finalScript = finalScript.replace('${REPLACE-WRAPPER-SCRIPT}', 'export INST_DIR=`dirname $0`\nexport INST_DIR=`cd $INST_DIR/../; pwd`\n')
         else:
