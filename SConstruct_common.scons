@@ -335,7 +335,7 @@ if not baseEnv.GetOption('help'):
                     if excluded in listed:
                         listed.remove(excluded)
 
-	    # Remove duplicate packages
+            # Remove duplicate packages
             while len(listed)>0:
                 curDir = listed.pop(0)
                 package = re.compile('-.*$').sub('', curDir)
@@ -409,9 +409,9 @@ if not baseEnv.GetOption('help'):
                                                               variant),
                                    duplicate=dup, exports='myVars')
 
-	except Exception as inst:
-	    print(("scons: Skipped "+pkg.lstrip(override+os.sep)+" because of exceptions: "+str(inst)))
-	    traceback.print_tb(sys.exc_info()[2])
+        except Exception as inst:
+            print(("scons: Skipped "+pkg.lstrip(override+os.sep)+" because of exceptions: "+str(inst)))
+            traceback.print_tb(sys.exc_info()[2])
 
     if not override == '#':
         superList = baseEnv.GeneratePkgList(os.path.join(str(baseEnv['DATADIR']), 'supersede'), [])
