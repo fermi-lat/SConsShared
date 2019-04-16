@@ -3,7 +3,7 @@
 # Authors: Navid Golpayegani <golpa@slac.stanford.edu>, Joanne Bogart <jrb@slac.stanford.edu>
 # Version: SConsShared-02-03-00
 
-import os,platform,SCons,glob,re,atexit,sys,traceback,subprocess,subprocess
+import os,platform,SCons,glob,re,atexit,sys,traceback,subprocess,subprocess,locale
 #########################
 #   Global Environment  #
 #########################
