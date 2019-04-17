@@ -1257,13 +1257,13 @@ allExternalLibraries = {
                   'conda' :
                    { 'default' : { 'version'      : 'Anaconda',
                                    'top'        : os.path.join('$CONDA'),
-                                   'include-path' : os.path.join('$TOP', 'include', 'python2.7'),
-                                   'lib-path'     : os.path.join('$TOP', 'lib', 'python2.7', 'config'),
-                                   'site-path'    : os.path.join('$TOP', 'lib', 'python2.7', 'site-packages'),
+                                   'include-path' : os.path.join('$TOP', 'include', 'python3.7'),
+                                   'lib-path'     : os.path.join('$TOP', 'lib', 'python3.7', 'config'),
+                                   'site-path'    : os.path.join('$TOP', 'lib', 'python3.7', 'site-packages'),
                                    'ld-path'      : '$LIB-PATH',
                                    'bin-path'     : os.path.join('$TOP', 'bin'),
                                    'includes'     : [ 'Python.h' ],
-                                   'libraries'    : { 'pythonLibs' : [ 'pthread', 'dl', 'util', 'm', 'python2.7' ] }
+                                   'libraries'    : { 'pythonLibs' : [ 'pthread', 'dl', 'util', 'm', 'python3.7' ] }
                                  }
                    },
 
