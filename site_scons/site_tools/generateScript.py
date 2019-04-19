@@ -118,7 +118,7 @@ def fillScript(scriptFile, env, wrapper, script, executable):
         finalScript = finalScript.replace('${REPLACE-BASEDIR}', basedirAbs)
     else:
         # print "inst is ", inst
-        finalScript = (finalScript.decode("utf-8")).replace(('${REPLACE-BASEDIR}'.encode("utf-8")), inst)
+        finalScript = (finalScript.decode("utf-8")).replace(('${REPLACE-BASEDIR}'), inst)
         
     # Handle pfiles setup
     if 'usePfiles' in env:
