@@ -63,7 +63,7 @@ allExternalLibraries = {
                     },
                    'conda' :
                    { 'default' : { 'version'      : '',
-                                   'top'          : os.path.join('$CONDA/../_build_env'),
+                                   'top'          : os.path.join('$CONDA'),
                                    'include-path' : os.path.join('$TOP', 'include'),
                                    'lib-path'     : os.path.join('$TOP', 'lib'),
                                    'ld-path'      : '$LIB-PATH',
@@ -296,13 +296,13 @@ allExternalLibraries = {
                                    'libraries'    : { 'apeLibs' : [ 'apelib' ] } },
                      },
                    'conda' :
-                   { 'default' : { 'version'      : '2.9.1',
+                   { 'default' : { 'version'      : '2.9',
                                    'top'          : os.path.join('$CONDA'),
                                    'include-path' : os.path.join('$TOP', 'include'),
                                    'lib-path'     : os.path.join('$TOP', 'lib'),
                                    'ld-path'      : '$LIB-PATH',
                                    'includes'     : [ 'ape/ape_list.h' ],
-                                   'libraries'    : { 'apeLibs' : [ 'ape', 'readline', 'ncurses' ] }
+                                   'libraries'    : { 'apeLibs' : [ 'ape_2.9', 'readline', 'tinfo' ] }
                                  },
                    },
 
