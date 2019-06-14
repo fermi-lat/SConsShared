@@ -302,7 +302,7 @@ allExternalLibraries = {
                                    'lib-path'     : os.path.join('$TOP', 'lib'),
                                    'ld-path'      : '$LIB-PATH',
                                    'includes'     : [ 'ape/ape_list.h' ],
-                                   'libraries'    : { 'apeLibs' : [ 'ape_2.9.1', 'readline', 'ncurses' ] }
+                                   'libraries'    : { 'apeLibs' : [ 'ape', 'readline', 'ncurses' ] }
                                  },
                    },
 
