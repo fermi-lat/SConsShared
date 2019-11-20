@@ -774,7 +774,7 @@ allExternalLibraries = {
 
                  },
                     'conda' :
-                    { 'default' : { 'version'      : 'v6.14.06',
+                    { 'default' : { 'version'      : 'v5.34.36',
                                     'top'          : os.path.join('$CONDA'),
                                     'include-path' : os.path.join('$TOP', 'include', 'root'),
                                     'lib-path'     : os.path.join('$TOP', 'lib', 'root'),
@@ -782,12 +782,12 @@ allExternalLibraries = {
                                     'bin-path'     : os.path.join('$TOP', 'bin'),
                                     'includes'     : [ 'RVersion.h' ],
                                     'libraries'    : { 'rootLibs'    : ['Tree', 'Net', 'Gpad', 'Graf', 'RIO', 'Hist',
-                                                                           'Physics', 'Matrix', 'Core', 'Cling','pthread', 'm', 'dl'],
+                                                                           'Physics', 'Matrix', 'Core', 'Cint','pthread', 'm', 'dl'],
                                                           'rootGuiLibs' : [ 'MathCore', 'Thread', 'Rint', 'Postscript', 'TreePlayer',
                                                                             'Tree', 'Net',
                                                                             'Graf3d', 'Gui', 'HistPainter', 'Gpad' ],
                                                           'minuitLibs'  : [ 'Minuit2', 'Minuit', 'Graf', 'RIO', 'Hist', 'Matrix',
-                                                                            'Core', 'Cling', 'dl' ]
+                                                                            'Core', 'Cint', 'dl' ]
                                                           }
                                     # 'libraries'    :
                                     # { 'rootLibs'    : [ 'Tree', 'Net', 'Gpad', 'Graf', 'RIO', 'Hist', 'Physics', 'Matrix', 'Core', 'Cint', 'pthread', 'm', 'dl' ],
