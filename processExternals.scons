@@ -209,7 +209,7 @@ def checkEnvironment(configuredExternal):
                     Exit(1)
     if 'binaries' in configuredExternal:
         for binary in configuredExternal['binaries']:
-            print('Checking for application '+binary+'... ', end=' ')
+            print('Checking for application '+binary+'... ')
             if not os.path.isfile(os.path.join(configuredExternal['bin-path'], binary)):
                 print('no')
                 print('Unable to find binary for '+configuredExternal['name']+'.')
