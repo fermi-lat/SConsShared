@@ -108,7 +108,8 @@ allExternalLibraries = {
                                    'include-path' : os.path.join('$TOP', 'include'),
                                    'lib-path'     : os.path.join('$TOP', 'lib'),
                                    'ld-path'      : '$LIB-PATH',
-                                   'includes'     : [ 'fftw/fftw3.h' ],
+                                   'includes'     : [ 'fftw3.h' ],
+                                   'cpp-defines'  : ['CONDA_FFTW'],
                                    'libraries'    : { 'fftwLibs' : ['fftw3'] }
                                  },
                  },
