@@ -779,7 +779,7 @@ allExternalLibraries = {
                                                                         'Tree', 'Net',
                                                                         'Graf3d', 'Gui', 'HistPainter', 'Gpad' ],
                                                       'minuitLibs'  : [ 'Minuit2', 'Minuit', 'Graf', 'RIO', 'Hist', 'Matrix',
-                                                                        'Core', 'Cling', 'dl' ]
+                                                                        'Core', 'dl' ]
                                                       }
                                   },
                       'darwin' : { 'dylib-path' : '$LIB-PATH' }
