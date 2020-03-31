@@ -774,7 +774,7 @@ allExternalLibraries = {
                                     'bin-path'     : os.path.join('$TOP', 'bin'),
                                     'includes'     : [ 'RVersion.h' ],
                                     'libraries'    :
-                                    { 'rootLibs'    : [ 'Tree', 'Net', 'Gpad', 'Graf', 'RIO', 'Hist', 'Physics', 'Matrix', 'Core', 'Cling','pthread', 'm', 'dl'],
+                                    { 'rootLibs'    : [ 'Tree', 'Net', 'Gpad', 'Graf', 'RIO', 'Hist', 'Physics', 'Matrix', 'Core', 'pthread', 'm', 'dl'],
                                       'rootGuiLibs' : [ 'MathCore', 'Thread', 'Rint', 'Postscript', 'TreePlayer', 'Tree', 'Net', 'Graf3d', 'Gui', 'HistPainter', 'Gpad' ],
                                       'minuitLibs'  : [ 'Minuit2', 'Minuit', 'Graf', 'RIO', 'Hist', 'Matrix', 'Core', 'dl' ]
                                     }
