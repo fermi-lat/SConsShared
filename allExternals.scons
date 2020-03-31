@@ -768,19 +768,16 @@ allExternalLibraries = {
                     'conda' :
                     { 'default' : { 'version'      : '6',
                                     'top'          : os.path.join('$CONDA'),
-                                    'include-path' : os.path.join('$TOP', 'include', 'root'),
-                                    'lib-path'     : os.path.join('$TOP', 'lib', 'root'),
+                                    'include-path' : os.path.join('$TOP', 'include', '$NAME'),
+                                    'lib-path'     : os.path.join('$TOP', 'lib'),
                                     'ld-path'      : '$LIB-PATH',
                                     'bin-path'     : os.path.join('$TOP', 'bin'),
                                     'includes'     : [ 'RVersion.h' ],
-                                    'libraries'    : { 'rootLibs'    : ['Tree', 'Net', 'Gpad', 'Graf', 'RIO', 'Hist',
-                                                                        'Physics', 'Matrix', 'Core', 'Cling','pthread', 'm', 'dl'],
-                                                      'rootGuiLibs' : [ 'MathCore', 'Thread', 'Rint', 'Postscript', 'TreePlayer',
-                                                                        'Tree', 'Net',
-                                                                        'Graf3d', 'Gui', 'HistPainter', 'Gpad' ],
-                                                      'minuitLibs'  : [ 'Minuit2', 'Minuit', 'Graf', 'RIO', 'Hist', 'Matrix',
-                                                                        'Core', 'dl' ]
-                                                      }
+                                    'libraries'    :
+                                    { 'rootLibs'    : [ 'Tree', 'Net', 'Gpad', 'Graf', 'RIO', 'Hist', 'Physics', 'Matrix', 'Core', 'Cling','pthread', 'm', 'dl'],
+                                      'rootGuiLibs' : [ 'MathCore', 'Thread', 'Rint', 'Postscript', 'TreePlayer', 'Tree', 'Net', 'Graf3d', 'Gui', 'HistPainter', 'Gpad' ],
+                                      'minuitLibs'  : [ 'Minuit2', 'Minuit', 'Graf', 'RIO', 'Hist', 'Matrix', 'Core', 'dl' ]
+                                    }
                                   },
                       'darwin' : { 'dylib-path' : '$LIB-PATH' }
 
@@ -3083,6 +3080,7 @@ allExternalLibraries = {
                                        'include-path' : os.path.join('$TOP','include','healpix_cxx'),
                                        'lib-path'     : os.path.join('$TOP','lib'),
                                        'ld-path'      : '$LIB-PATH',
+                                       'linkflags'    : ['-fopenmp'],
                                        'includes'     : [ 'healpix_base.h' ],
                                        'libraries'    : { 'healpixlibs' : [ 'libhealpix_cxx','libcxxsupport','libfftpack','libsharp','libc_utils']}
                                        }
