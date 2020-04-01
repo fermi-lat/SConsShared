@@ -108,6 +108,8 @@ allExternalLibraries = {
                                    'include-path' : os.path.join('$TOP', 'include'),
                                    'lib-path'     : os.path.join('$TOP', 'lib'),
                                    'ld-path'      : '$LIB-PATH',
+                                   'ld-flags'     : ['-fopenmp'],
+                                   'cxxflags'     : ['-fopenmp'],
                                    'includes'     : [ 'fftw3.h' ],
                                    'cpp-defines'  : ['CONDA_FFTW'],
                                    'libraries'    : { 'fftwLibs' : ['fftw3'] }
@@ -3080,8 +3082,6 @@ allExternalLibraries = {
                                        'include-path' : os.path.join('$TOP','include','healpix_cxx'),
                                        'lib-path'     : os.path.join('$TOP','lib'),
                                        'ld-path'      : '$LIB-PATH',
-                                       # 'ld-flags'     : ['-fopenmp'],
-                                       # 'cxxflags'     : ['-fopenmp'],
                                        'includes'     : [ 'healpix_base.h' ],
                                        'libraries'    : { 'healpixlibs' : [ 'libhealpix_cxx','libcxxsupport','libfftpack','libsharp','libc_utils']}
                                        }
