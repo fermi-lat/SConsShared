@@ -777,7 +777,7 @@ allExternalLibraries = {
                     { 'default' : { 'version'      : 'v6.18.04',
                                     'top'          : os.path.join('$CONDA'),
                                     'include-path' : os.path.join('$TOP', 'include', 'root'),
-                                    'lib-path'     : os.path.join('$TOP', 'lib', 'root'),
+                                    'lib-path'     : os.path.join('$TOP', 'lib'),
                                     'ld-path'      : '$LIB-PATH',
                                     'bin-path'     : os.path.join('$TOP', 'bin'),
                                     'includes'     : [ 'RVersion.h' ],
