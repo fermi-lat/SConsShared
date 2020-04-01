@@ -1267,7 +1267,8 @@ allExternalLibraries = {
                                    'bin-path'     : os.path.join('$TOP', 'bin'),
                                    'includes'     : [ 'Python.h' ],
                                    'libraries'    : { 'pythonLibs' : [ 'pthread', 'dl', 'util', 'm', 'python3.7m' ] }
-                                 }
+                                 },
+                     'darwin'  : { 'lib-path'     : os.path.join('$TOP', 'lib', 'python3.7', 'config-3.7m-darwin') }
                    },
                   'env27' :
                    { 'default' : { 'version'      : 'env27',
