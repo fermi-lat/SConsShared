@@ -305,13 +305,13 @@ allExternalLibraries = {
                                    'libraries'    : { 'apeLibs' : [ 'apelib' ] } },
                      },
                    'conda' :
-                   { 'default' : { 'version'      : '2.9',
+                   { 'default' : { 'version'      : '3',
                                    'top'          : os.path.join('$CONDA'),
                                    'include-path' : os.path.join('$TOP', 'include'),
                                    'lib-path'     : os.path.join('$TOP', 'lib'),
                                    'ld-path'      : '$LIB-PATH',
                                    'includes'     : [ 'ape/ape_list.h' ],
-                                   'libraries'    : { 'apeLibs' : [ 'ape_2.9', 'readline', 'tinfo' ] }
+                                   'libraries'    : { 'apeLibs' : [ 'ape_3', 'readline', 'tinfo' ] }
                                  },
                    },
 
