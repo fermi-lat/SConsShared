@@ -59,6 +59,9 @@ def setupOptions(name, configuredExternal):
     if 'bin-path' in configuredExternal:
         AddOption('--with-'+name+'-binaries', dest = name+'-binaries', nargs=1, type='string', action='store',
                   metavar='DIR', help='location of '+name+' '+configuredExternal['version']+' binaries')
+    if 'cxxflags' in configuredExternal:
+        AddOption('--with-'+name+'-cxxflags', dest = name+'-cxxflags', nargs=1, type='string', action='store',
+                  metavar='FLAGS', help='location of '+name+' '+configuredExternal['version']+' cxxflags')
 
     if baseEnv.GetOption(external['name']):
         if 'top' in configuredExternal:
@@ -70,6 +73,8 @@ def setupOptions(name, configuredExternal):
                 configuredExternal['lib-path'] = os.path.join(baseEnv.GetOption(external['name']), 'lib')
             if 'bin-path' in configuredExternal:
                 configuredExternal['bin-path'] = os.path.join(baseEnv.GetOption(external['name']), 'bin')
+            if 'cxxflags' in configuredExternal:
+                configuredExternal['cxxflags'] = os.path.join(baseEnv.GetOption(external['name']), 'cxxflags')
     else:
         if 'include-path' in configuredExternal and baseEnv.GetOption(external['name']+'-includes'):
             configuredExternal['include-path'] = baseEnv.GetOption(external['name']+'-includes')
@@ -77,6 +82,8 @@ def setupOptions(name, configuredExternal):
             configuredExternal['lib-path'] = baseEnv.GetOption(external['name']+'-libraries')
         if 'bin-path' in configuredExternal and baseEnv.GetOption(external['name']+'-binaries'):
             configuredExternal['bin-path'] = baseEnv.GetOption(external['name']+'-binaries')
+        if 'cxxflags' in configuredExternal and baseEnv.GetOption(external['name']+'-cxxflags'):
+            configuredExternal['cxxflags'] = baseEnv.GetOption(external['name']+'-cxxflags')
     return configuredExternal
 
 def replace(string, variable, substitute):
@@ -162,17 +169,16 @@ def setupEnvironment(configuredExternal):
         if wrapperlib != "$LIB-PATH":
             baseEnv.AppendUnique(WRAPPERLIBS = [wrapperlib])
 
-#    if 'ld-flags' in configuredExternal:
-#        for define in configuredExternal['ld-flags']:
-#            these_options = define.split(" ")
-#            if baseEnv['PLATFORM'] == 'darwin':
-#                # Need to check whether openmp is in the options
-#                # and remove it in this case, since it is not suppored
-#                # on Mac
-#                if '-fopenmp' in these_options:
-#                    these_options.pop(these_options.index('-fopenmp'))
-#            
-#            baseEnv.AppendUnique(LINKFLAGS = these_options)
+    if 'ld-flags' in configuredExternal:
+        for define in configuredExternal['ld-flags']:
+            these_options = define.split(" ")
+            # if baseEnv['PLATFORM'] == 'darwin':
+            #     # Need to check whether openmp is in the options
+            #     # and remove it in this case, since it is not suppored
+            #     # on Mac
+            #     if '-fopenmp' in these_options:
+            #         these_options.pop(these_options.index('-fopenmp'))
+            baseEnv.AppendUnique(LINKFLAGS = these_options)
 
     #Add library groups to base environment
     if 'libraries' in configuredExternal:
