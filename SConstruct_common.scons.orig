@@ -1,0 +1,451 @@
+# -*- python -*-
+# $Header: /nfs/farm/g/glast/u52/cvs_test/cvs/ScienceTools_User-scons/SConsShared/SConstruct_common.scons,v 1.2 2017/07/22 01:27:42 jrb Exp $
+# Authors: Navid Golpayegani <golpa@slac.stanford.edu>, Joanne Bogart <jrb@slac.stanford.edu>
+# Version: SConsShared-02-03-00
+
+import os,platform,SCons,glob,re,atexit,sys,traceback,commands,subprocess
+#########################
+#   Global Environment  #
+#########################
+
+EnsureSConsVersion(2, 1, 0)
+
+#  Define compiler options *before* creating baseEnv
+AddOption('--32bit', dest='bits', action='store_const', const='32', help='Force 32bit compiles even on 64bit machines')
+AddOption('--64bit', dest='bits', action='store_const', const='64', help='Force 64bit compiles even on 32bit machines')
+
+AddOption('--with-cc', dest='cc', action='store', nargs=1, type='string', metavar='COMPILER', help='Compiler to use for compiling C files')
+AddOption('--with-cxx', dest='cxx', action='store', nargs=1, type='string', metavar='COMPILER', help='Compiler to user for compiling C++ files')
+
+AddOption('--use-path', dest='usepath', action='store_true', help='Set the PATH env. variable during build to what is currently active')
+
+baseEnv=Environment()
+
+if baseEnv.GetOption('usepath'):
+    baseEnv = Environment(ENV = {'PATH': os.environ['PATH']}) 
+
+baseEnv.Tool('generateScript')
+baseEnv.Tool('writePkgList')
+baseEnv.Tool('doxygen')
+baseEnv.Alias('NoTarget')
+baseEnv.SourceCode(".", None)
+variant = "Unknown-"
+baseEnv['OSNAME'] = "Unknown"
+baseEnv['MACHINENAME'] = "Unknown"
+baseEnv['ARCHNAME'] = "Unknown"
+if baseEnv['PLATFORM'] == "posix":
+    variant = platform.dist()[0]+re.sub('\.\d+', '',platform.dist()[1])+"-"+platform.machine()+"-"+platform.architecture()[0]
+    baseEnv['OSNAME'] = platform.dist()[0]+re.sub('\.\d+', '', platform.dist()[1])
+    baseEnv['MACHINENAME'] = platform.machine()
+    baseEnv['ARCHNAME'] = platform.architecture()[0]
+    platBrief = platform.dist()[0] + platform.dist()[1] + "_" + platform.architecture()[0]
+
+if baseEnv['PLATFORM'] == "darwin":
+    version = commands.getoutput("sw_vers -productVersion")
+    cpu = commands.getoutput("uname -m")
+    baseEnv['MACHINENAME'] = cpu
+    if version.startswith("10.8"):
+        variant="mountainlion-"
+        cpu = "x86_64"
+        baseEnv['OSNAME'] = "mountainlion"
+    if version.startswith("10.6"):
+        variant="snowleopard-"
+        baseEnv['OSNAME'] = "snowleopard"
+    if version.startswith("10.5"):
+        variant="leopard-"
+        baseEnv['OSNAME'] = "leopard"
+    if version.startswith("10.4"):
+        variant="tiger-"
+        baseEnv['OSNAME'] = "tiger"
+    variant+=cpu+"-"
+    if cpu.endswith("64"):
+        variant+="64bit"
+        baseEnv['ARCHNAME'] = '64bit'
+    else:
+        variant+="32bit"
+        baseEnv['ARCHNAME'] = '32bit'
+    platBrief=variant
+
+
+baseEnv.AppendUnique(CPPDEFINES = ['SCons'])
+
+AddOption('--compile-debug', dest='debug', action='store_true', help='Compile with debug flags')
+AddOption('--compile-opt', dest='opt', action='store_true', help='Compile with optimization flags')
+AddOption('--rm', dest='rm', action='store_true', help='Enable output helpful for RM output parsing')
+AddOption('--ccflags', dest='ccflags', action='store', nargs=1, type='string', metavar='FLAGS', help='Compiler flags to pass to the C compiler')
+AddOption('--cxxflags', dest='cxxflags', action='store', nargs=1, type='string', metavar='FLAGS', help='Compiler flags to pass to the C++ compiler')
+AddOption('--ldflags', dest='ldflags', action='store', nargs=1, type='string', metavar='LINKFLAGS', help="Linker flags (LDFLAGS)")
+AddOption('--with-python3', dest='python3', action='store_true', help='Use Python3 interpreter')
+AddOption('--variant', dest='variant', action='store', nargs=1, type='string', help='The variant to use instead of the computed one')
+AddOption('--supersede', dest='supersede', action='store', nargs=1, type='string', default='#', metavar='DIR', help='Directory containing packages superseding installed ones. Relative paths not supported!')
+AddOption('--exclude', dest='exclude', action='append', nargs=1, type='string', metavar='DIR', help='Directory containing a SConscript file that should be ignored.')
+AddOption('--user-release', dest='userRelease', nargs=1, type='string', action='store', metavar='FILE', help='Creates a compressed user release and stores it in FILE, which should be specified with absolute path')
+AddOption('--source-release', dest='sourceRelease', nargs=1, type='string', action='store', metavar='FILE', help='Creates a compressed source release and stores it in FILE, which should be specified with absolute path')
+AddOption('--devel-release', dest='develRelease', nargs=1, type='string', action='store', metavar='FILE', help='Creates a compressed developer release and stires it in FILE, which should be specified with absolute path')
+AddOption('--doxygen', dest='doxygenOutput', nargs=1, type='string', default='${HTML-OUTPUT}', action='store', metavar='DIRECTORY', help='Sets up Doxygen configuration to write html in DIRECTORY')
+AddOption('--containerName', dest='containerName', nargs=1, type='string', action='store', help='Name of the package you are building (i.e. GlastRelease, ScienceTools, etc).  Only used for creating the distribution files')
+
+AddOption('--externalsList', dest='externalsList', action='store', nargs='?', const='externals.extList',
+          help='filename for file of external names and versions to be written to data subdirectory. Defaults to externals.extList if options is supplied without value.  The file will only be written if the command line specifies no (other) target')
+AddOption('--conda', dest='CONDA-EXT', nargs=1, type='string', action='store',
+        metavar='DIR',
+        help='Path to conda prefix. Override normal external version checking and pathing.')
+
+if baseEnv.GetOption('cc'):
+    baseEnv.Replace(CC = baseEnv.GetOption('cc'))
+    pipe = SCons.Action._subproc(baseEnv, [baseEnv['CC'], '-dumpversion'], stdin = 'devnull', stderr = 'devnull', stdout = subprocess.PIPE)
+    line = pipe.stdout.read().strip()
+    if line:
+        baseEnv['CCVERSION'] = line
+
+if baseEnv.GetOption('cxx'):
+    baseEnv.Replace(CXX = baseEnv.GetOption('cxx'))
+    pipe = SCons.Action._subproc(baseEnv, [baseEnv['CXX'], '-dumpversion'],stdin = 'devnull', stderr = 'devnull', stdout = subprocess.PIPE)
+    line = pipe.stdout.read().strip()
+    if line:
+        baseEnv['CXXVERSION'] = line
+
+if baseEnv.GetOption('bits') == '32':
+    baseEnv.AppendUnique(CCFLAGS = ['-m32'])
+    baseEnv.AppendUnique(LINKFLAGS = ['-m32'])
+
+if baseEnv.GetOption('bits') == '64':
+    baseEnv.AppendUnique(CCFLAGS = ['-m64'])
+    baseEnv.AppendUnique(LINKFLAGS = ['-m64'])
+
+
+compiler = 'gcc'+''.join(baseEnv['CXXVERSION'].split('.')[0:2])
+
+baseEnv['COMPILERNAME'] = compiler
+variant += "-" + compiler
+platBrief += "-" + compiler
+
+
+if baseEnv.GetOption('debug'):
+    baseEnv.AppendUnique(CCFLAGS = '-g')
+    variant+="-Debug"
+
+if baseEnv.GetOption('opt'):
+    baseEnv.AppendUnique(CCFLAGS = '-O2')
+    variant+='-Optimized'
+
+if baseEnv.GetOption('ccflags'):
+    baseEnv.AppendUnique(CCFLAGS = baseEnv.GetOption('ccflags').strip().split(" "))
+if baseEnv.GetOption('cxxflags'):
+    baseEnv.AppendUnique(CXXFLAGS = baseEnv.GetOption('cxxflags').strip().split(" "))
+if baseEnv.GetOption('ldflags'):
+    baseEnv.AppendUnique(LINKFLAGS = baseEnv.GetOption('ldflags').strip().split(" "))
+if baseEnv.GetOption('variant'):
+    variant = baseEnv.GetOption('variant')
+    if variant == "NONE": baseEnv['NO_VARIANT'] = True
+override = baseEnv.GetOption('supersede')
+if override == '#':
+    SConsignFile(os.path.join('..',platBrief , '.sconsign.dblite'))
+else:
+    SConsignFile(os.path.join(os.path.join(override, platBrief) , '.sconsign.dblite'))
+if override=="#":
+    outputRoot = os.path.join(override, '..')
+else:
+    outputRoot = override
+    baseRoot = os.path.join('#', '..')
+baseEnv['VARIANT'] = variant
+baseEnv['PLATBRIEF'] = platBrief
+Export('baseEnv')
+
+#########################
+#OS Specific Compile Opt#
+#########################
+baseEnv.AppendUnique(CXXFLAGS = "-fpermissive")
+
+if baseEnv['PLATFORM'] == "posix":
+    baseEnv.AppendUnique(CCFLAGS = "-fPIC")
+    baseEnv.AppendUnique(SHLINKFLAGS = "-fPIC")
+#    baseEnv.AppendUnique(CCFLAGS = "-gstabs")
+# for profiling with gprof:
+#    baseEnv.AppendUnique(CCFLAGS = "-pg")
+#    baseEnv.AppendUnique(LINKFLAGS = "-pg")
+    baseEnv.AppendUnique(CPPDEFINES = ['TRAP_FPE'])
+
+<<<<<<< HEAD
+if baseEnv['PLATFORM'] == "darwin":
+    install_name= "@rpath/fermitools/${TARGET.file}" if baseEnv.GetOption('CONDA-EXT') else "${TARGET.file}"
+    baseEnv.AppendUnique(SHLINKFLAGS = ["-Wl,-install_name,"+install_name])
+
+||||||| 5fdf1c4
+if baseEnv['PLATFORM'] == "darwin":
+    baseEnv.AppendUnique(SHLINKFLAGS = ["-Wl,-install_name", "-Wl,${TARGET.file}"])
+=======
+# if baseEnv['PLATFORM'] == "darwin":
+#     baseEnv.AppendUnique(SHLINKFLAGS = ["-Wl,-install_name,${TARGET.file}"])
+
+if(baseEnv.GetOption('CONDA-EXT')):
+    baseEnv.AppendUnique(SHLINKFLAGS = ["-Wl,-install_name,@rpath/fermitools/${TARGET.file}"])
+>>>>>>> b796aa064c2a99c5358eda0305aed6f58dd0e182
+
+#########################
+#  Project Environment  #
+#########################
+if 'NO_VARIANT' in baseEnv:
+    baseEnv.Append(LIBDIR         = Dir(outputRoot).Dir('lib'))
+    baseEnv.Append(BINDIR         = Dir(outputRoot).Dir('exe'))
+    baseEnv.Append(SCRIPTDIR      = Dir(outputRoot).Dir('bin'))
+else:
+    baseEnv.Append(LIBDIR         = Dir(outputRoot).Dir('lib').Dir(variant))
+    baseEnv.Append(BINDIR         = Dir(outputRoot).Dir('exe').Dir(variant))
+    baseEnv.Append(SCRIPTDIR      = Dir(outputRoot).Dir('bin').Dir(variant))
+
+baseEnv.Append(INCDIR         = Dir(outputRoot).Dir('include'))
+baseEnv.Append(PFILESDIR      = Dir(outputRoot).Dir('syspfiles'))
+baseEnv.Append(DATADIR        = Dir(outputRoot).Dir('data'))
+baseEnv.Append(XMLDIR         = Dir(outputRoot).Dir('xml'))
+baseEnv.Append(JODIR          = Dir(outputRoot).Dir('jobOptions'))
+baseEnv.Append(TOOLDIR        = Dir(outputRoot).Dir('sconsTools'))
+
+# Output directories for "normal" targets
+products = ['bin', 'lib', 'exe', 'sconsTools', 'include', 'xml', 'data', 'jobOptions', 'python', 'syspfiles']
+
+
+if override != '#':
+    baseEnv.Append(toolpath=[os.path.join(baseRoot, 'sconsTools')])
+
+baseEnv.Append(TESTDIR        = baseEnv['BINDIR'])
+baseEnv.Append(TESTSCRIPTDIR  = baseEnv['SCRIPTDIR'])
+baseEnv.Append(PYTHONDIR      = Dir(outputRoot).Dir('python'))
+baseEnv.Append(DOCDIR         = Dir(outputRoot).Dir('SConsShared').Dir('Doxygen'))
+##baseEnv.Append(DEFAULTDOCFILE = Dir('.').Dir('SConsShared').Dir('Doxygen').File('Default'))
+baseEnv.Append(DEFAULTDOCFILE = Dir('#').Dir('..').Dir('SConsShared').Dir('Doxygen').File('Default'))
+baseEnv.Append(DOXYGENOUTPUT  = baseEnv.GetOption('doxygenOutput'))
+baseEnv['CONFIGURELOG']       = str(Dir(outputRoot).File("config.log"))
+baseEnv['CONFIGUREDIR']       = str(Dir(outputRoot).Dir(".sconf_temp"))
+baseEnv.Append(CPPPATH = ['.'])
+baseEnv.Append(CPPPATH = ['src'])
+baseEnv.Append(CPPPATH = [baseEnv['INCDIR']])
+baseEnv.Append(LIBPATH = [baseEnv['LIBDIR']])
+if override != '#':
+    baseEnv.Append(CPPPATH  = [os.path.join(baseRoot, 'include')]  )
+    if 'NO_VARIANT' in baseEnv:
+        baseEnv.Append(LIBPATH = [os.path.join(baseRoot, 'lib')] )
+    else:
+        baseEnv.Append(LIBPATH = [os.path.join(baseRoot, 'lib', variant)] )
+
+# These may be contributing the paths containing SConsShared
+#baseEnv.AppendUnique(CPPPATH = os.path.join(os.path.abspath('.'),'include'))
+#if 'NO_VARIANT' in baseEnv:
+#    baseEnv.AppendUnique(LIBPATH = os.path.join(os.path.abspath('.'),'lib'))
+#else:
+#    baseEnv.AppendUnique(LIBPATH = os.path.join(os.path.abspath('.'),'lib',variant))
+
+##################
+# Create release #
+##################
+#baseEnv['TARFLAGS']='-c'
+if baseEnv.GetOption('userRelease'):
+    baseEnv.Tool('makeRelease')
+    baseEnv['products'] = products
+
+    baseEnv['RELEASE_TYPE'] = 'user'
+    baseEnv.Default(baseEnv.GenerateReleaseTarball(target=baseEnv.GetOption('userRelease'),source = [baseEnv['LIBDIR'], baseEnv['SCRIPTDIR'], baseEnv['BINDIR']]))
+    Return()
+if baseEnv.GetOption('sourceRelease'):
+    baseEnv.Tool('makeRelease')
+    baseEnv['products'] = products
+
+    baseEnv['RELEASE_TYPE'] = 'source'
+    baseEnv.Default(baseEnv.GenerateReleaseTarball(target=baseEnv.GetOption('sourceRelease'), source=[]))
+    Return()
+if baseEnv.GetOption('develRelease'):
+    baseEnv.Tool('makeRelease')
+    baseEnv['products'] = products
+
+    baseEnv['RELEASE_TYPE'] = 'devel'
+    baseEnv.Default(baseEnv.GenerateReleaseTarball(target=baseEnv.GetOption('develRelease'), source=[baseEnv['LIBDIR'], baseEnv['SCRIPTDIR'], baseEnv['BINDIR']]))
+    Return()
+
+
+#####################################
+#  Container Settings Directories   #
+#####################################
+Import('myVars')
+baseSettingsDir = '#/../' + myVars['myPrefix'] + 'containerSettings'
+#if os.path.exists('containerPrefix.scons'):
+#
+#    basePrefix = SConscript('containerPrefix.scons')
+#    baseSettingsDir = basePrefix + baseSettingsDir
+
+supersedeSettingsDir = '#/' + myVars['myPrefix'] + 'containerSettings'
+#if override != '.':
+#    if os.path.exists(os.path.join(override, 'containerPrefix.scons')):
+#        supersedePrefix = SConscript(os.path.join(override,
+#                                                  'containerPrefix.scons'))
+#        supersedeSettingsDir = supersedePrefix + supersedeSettingsDir
+
+
+
+#########################
+#  External Libraries   #
+#########################
+allExternals = SConscript('allExternals.scons')
+
+usedExternals = SConscript(os.path.join(baseSettingsDir, 'externals.scons'),
+                           exports = 'allExternals')
+
+configuredExternals = SConscript('processExternals.scons', exports = 'allExternals usedExternals')
+
+
+############################
+# Package Specific Options #
+############################
+pkgScons = os.path.join(override, supersedeSettingsDir, 'package.scons')
+if os.path.exists(pkgScons):
+    SConscript(pkgScons, exports='pkgScons')
+else:
+    pkgScons = os.path.join(baseSettingsDir, 'package.scons')
+    SConscript(pkgScons, exports='pkgScons')
+
+if baseEnv.GetOption('externalsList'):
+    extEnv = Environment(configuredExternals=configuredExternals)
+    extEnv.Tool('writeExternalsList')
+    #print "calling writeExternalsList with target: "
+    #print os.path.join(str(baseEnv['DATADIR']),baseEnv.GetOption('externalsList'))
+    externalsList = extEnv.GenerateExternalsList(target=os.path.join(str(baseEnv['DATADIR']),baseEnv.GetOption('externalsList')), source = [])
+    Default(externalsList)
+
+    Return()
+
+def listFiles(files, **kw):
+    allFiles = []
+    for file in files:
+        globFiles = Glob(file)
+        newFiles = []
+        for globFile in globFiles:
+	    if 'recursive' in kw and kw.get('recursive') and os.path.isdir(globFile.srcnode().abspath) and os.path.basename(globFile.srcnode().abspath) != 'CVS' and os.path.basename(globFile.srcnode().abspath) != 'SConsShared' :
+	        allFiles+=listFiles([str(Dir('.').srcnode().rel_path(globFile.srcnode()))+"/*"], recursive = True)
+	    if os.path.isfile(globFile.srcnode().abspath):
+	        allFiles.append(globFile)
+    return allFiles
+
+Export('listFiles')
+
+if not baseEnv.GetOption('help'):
+    # set haveSuper = True if this installation as non-trivial supersede dir
+    # In that case, if rootdir = '.', don't do add to tool path
+    def findPackages(rootdir, haveSuper):
+        #toolAdd = not haveSuper or (rootdir != '.')
+        toolAdd = not haveSuper or (rootdir != '#')
+        if rootdir == '#': rootdir = '../'
+        dirs = [rootdir]
+        pcks = []
+        while len(dirs)>0:
+            directory = dirs.pop(0)
+            members = os.listdir(directory)
+            # filter out non-directories
+            listed = [e for e in members if os.path.isdir(os.path.join(directory,e))]
+            listed.sort()
+            pruned = []
+            # Remove excluded directories
+            if not baseEnv.GetOption('exclude') == None:
+                for excluded in baseEnv.GetOption('exclude'):
+                    if excluded in listed:
+                        listed.remove(excluded)
+
+	    # Remove duplicate packages
+            while len(listed)>0:
+                curDir = listed.pop(0)
+                package = re.compile('-.*$').sub('', curDir)
+                while len(listed)>0 and re.match(package+'-.*', listed[0]):
+                    curDir = listed.pop(0)
+                pruned.append(curDir)
+
+            # Check if they contain SConscript and tools
+            for name in pruned:
+                package = re.compile('-.*$').sub('',name)
+                if not name in ['build', 'CVS', 'src', 'cmt', 'mgr', 'data',
+                                'xml', 'pfiles', 'doc', 'bin', 'lib']:
+                    fullpath = os.path.join(directory,name)
+                    if os.path.isdir(fullpath):
+                        dirs.append(fullpath)
+                        if os.path.isfile(os.path.join(fullpath,"SConscript")):
+                            pcks.append(fullpath)
+                        if os.path.isfile(os.path.join(fullpath,
+                                                       package+'Lib.py')):
+                            if toolAdd:
+                                SCons.Tool.DefaultToolpath.append(os.path.abspath(fullpath))
+        return (dirs, pcks)
+
+    (directories, packages) = findPackages(override, False)
+
+
+
+    if not override == '#':
+        SCons.Tool.DefaultToolpath.append(os.path.abspath(str(Dir(override).Dir('sconsTools'))))
+
+    Export('packages')
+    baseEnv['packageNameList'] = packages
+
+    ##print "Found packages are", packages
+
+# To create _setup anad wrappers
+    pfilesSetup = baseEnv.Install(baseEnv['SCRIPTDIR'],
+                                  [os.path.join('shellscripts',
+                                                'pfiles_setup.sh'),
+                                   os.path.join('shellscripts',
+                                                'pfiles_setup.csh')])
+
+
+    setupScript = baseEnv.GenerateSetupScript(os.path.join(str(baseEnv['SCRIPTDIR']),
+                                                       "_setup"))
+    if  'usePfiles' in baseEnv:
+        baseEnv.Depends(setupScript, pfilesSetup)
+
+    if override != '#':
+        baseEnv.AlwaysBuild(setupScript)
+
+    baseEnv.Default(setupScript)
+    baseEnv.Alias('all', setupScript)
+    baseEnv.Alias('setup', setupScript)
+
+    baseEnv['setupTarget'] = setupScript
+
+
+    dup = 1                          # using sym links
+
+    for pkg in packages:
+        #print "Processing package ", str(pkg)
+        try:
+            if 'NO_VARIANT' in baseEnv:
+                baseEnv.SConscript(os.path.join(pkg,"SConscript"),
+                                   variant_dir = os.path.join(pkg, 'build'),
+                                   duplicate=dup, exports='myVars')
+            else:
+                baseEnv.SConscript(os.path.join(pkg,"SConscript"),
+                                   variant_dir = os.path.join(pkg, 'build',
+                                                              variant),
+                                   duplicate=dup, exports='myVars')
+
+	except Exception, inst:
+	    print "scons: Skipped "+pkg.lstrip(override+os.sep)+" because of exceptions: "+str(inst)
+	    traceback.print_tb(sys.exc_info()[2])
+
+    if not override == '#':
+        superList = baseEnv.GeneratePkgList(os.path.join(str(baseEnv['DATADIR']), 'supersede'), [])
+        baseEnv.AlwaysBuild([superList])
+        baseEnv.Default([superList])
+        baseEnv.Alias('all', [superList])
+        Depends(setupScript, [superList])
+
+    # Need set-up script for sensible use of project files.
+    if baseEnv.GetOption('clean'):
+        baseEnv.Default('test')
+
+
+
+def print_build_failures():
+    if not baseEnv.GetOption('help'):
+        from SCons.Script import GetBuildFailures
+        print "scons: printing failed nodes"
+        for bf in GetBuildFailures():
+            if str(bf.action) != "installFunc(target, source, env)":
+                print bf.node
+        print "scons: done printing failed nodes"
+
+atexit.register(print_build_failures)
