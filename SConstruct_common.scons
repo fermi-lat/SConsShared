@@ -161,8 +161,10 @@ if baseEnv['PLATFORM'] == "posix":
 #    baseEnv.AppendUnique(LINKFLAGS = "-pg")
     baseEnv.AppendUnique(CPPDEFINES = ['TRAP_FPE'])
 
+
 if baseEnv['PLATFORM'] == "darwin":
-    baseEnv.AppendUnique(SHLINKFLAGS = ["-Wl,-install_name", "-Wl,${TARGET.file}"])
+    install_name= "@rpath/fermitools/${TARGET.file}" if baseEnv.GetOption('CONDA-EXT') else "${TARGET.file}"
+    baseEnv.AppendUnique(SHLINKFLAGS = ["-Wl,-install_name,"+install_name])
 
 #########################
 #  Project Environment  #
