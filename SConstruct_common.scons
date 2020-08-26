@@ -17,9 +17,12 @@ AddOption('--64bit', dest='bits', action='store_const', const='64', help='Force 
 AddOption('--with-cc', dest='cc', action='store', nargs=1, type='string', metavar='COMPILER', help='Compiler to use for compiling C files')
 AddOption('--with-cxx', dest='cxx', action='store', nargs=1, type='string', metavar='COMPILER', help='Compiler to user for compiling C++ files')
 
+AddOption('--use-path', dest='usepath', action='store_true', help='Set the PATH env. variable during build to what is currently active')
 
 baseEnv=Environment()
 
+if baseEnv.GetOption('usepath'):
+    baseEnv = Environment(ENV = {'PATH': os.environ['PATH']}) 
 
 baseEnv.Tool('generateScript')
 baseEnv.Tool('writePkgList')
@@ -39,7 +42,7 @@ if baseEnv['PLATFORM'] == "posix":
 
 if baseEnv['PLATFORM'] == "darwin":
     version = commands.getoutput("sw_vers -productVersion")
-    cpu = commands.getoutput("arch")
+    cpu = commands.getoutput("uname -m")
     baseEnv['MACHINENAME'] = cpu
     if version.startswith("10.8"):
         variant="mountainlion-"
@@ -71,6 +74,7 @@ AddOption('--compile-opt', dest='opt', action='store_true', help='Compile with o
 AddOption('--rm', dest='rm', action='store_true', help='Enable output helpful for RM output parsing')
 AddOption('--ccflags', dest='ccflags', action='store', nargs=1, type='string', metavar='FLAGS', help='Compiler flags to pass to the C compiler')
 AddOption('--cxxflags', dest='cxxflags', action='store', nargs=1, type='string', metavar='FLAGS', help='Compiler flags to pass to the C++ compiler')
+AddOption('--ldflags', dest='ldflags', action='store', nargs=1, type='string', metavar='LINKFLAGS', help="Linker flags (LDFLAGS)")
 AddOption('--with-python3', dest='python3', action='store_true', help='Use Python3 interpreter')
 AddOption('--variant', dest='variant', action='store', nargs=1, type='string', help='The variant to use instead of the computed one')
 AddOption('--supersede', dest='supersede', action='store', nargs=1, type='string', default='#', metavar='DIR', help='Directory containing packages superseding installed ones. Relative paths not supported!')
@@ -86,7 +90,6 @@ AddOption('--externalsList', dest='externalsList', action='store', nargs='?', co
 AddOption('--conda', dest='CONDA-EXT', nargs=1, type='string', action='store',
         metavar='DIR',
         help='Path to conda prefix. Override normal external version checking and pathing.')
-
 
 if baseEnv.GetOption('cc'):
     baseEnv.Replace(CC = baseEnv.GetOption('cc'))
@@ -127,9 +130,11 @@ if baseEnv.GetOption('opt'):
     variant+='-Optimized'
 
 if baseEnv.GetOption('ccflags'):
-    baseEnv.AppendUnique(CCFLAGS = baseEnv.GetOption('ccflags'))
+    baseEnv.AppendUnique(CCFLAGS = baseEnv.GetOption('ccflags').strip().split(" "))
 if baseEnv.GetOption('cxxflags'):
-    baseEnv.AppendUnique(CXXFLAGS = baseEnv.GetOption('cxxflags'))
+    baseEnv.AppendUnique(CXXFLAGS = baseEnv.GetOption('cxxflags').strip().split(" "))
+if baseEnv.GetOption('ldflags'):
+    baseEnv.AppendUnique(LINKFLAGS = baseEnv.GetOption('ldflags').strip().split(" "))
 if baseEnv.GetOption('variant'):
     variant = baseEnv.GetOption('variant')
     if variant == "NONE": baseEnv['NO_VARIANT'] = True
@@ -161,8 +166,11 @@ if baseEnv['PLATFORM'] == "posix":
 #    baseEnv.AppendUnique(LINKFLAGS = "-pg")
     baseEnv.AppendUnique(CPPDEFINES = ['TRAP_FPE'])
 
-if baseEnv['PLATFORM'] == "darwin":
-    baseEnv.AppendUnique(SHLINKFLAGS = ["-Wl,-install_name", "-Wl,${TARGET.file}"])
+# if baseEnv['PLATFORM'] == "darwin":
+#     baseEnv.AppendUnique(SHLINKFLAGS = ["-Wl,-install_name,${TARGET.file}"])
+
+if(baseEnv.GetOption('CONDA-EXT')):
+    baseEnv.AppendUnique(SHLINKFLAGS = ["-Wl,-install_name,@rpath/fermitools/${TARGET.file}"])
 
 #########################
 #  Project Environment  #

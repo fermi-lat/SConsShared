@@ -117,7 +117,10 @@ allExternalLibraries = {
                                    'include-path' : os.path.join('$TOP', 'include'),
                                    'lib-path'     : os.path.join('$TOP', 'lib'),
                                    'ld-path'      : '$LIB-PATH',
-                                   'includes'     : [ 'fftw/fftw3.h' ],
+                                   'ld-flags'     : ['-fopenmp'],
+                                   'cxxflags'     : ['-fopenmp'],
+                                   'includes'     : [ 'fftw3.h' ],
+                                   'cpp-defines'  : ['CONDA_FFTW'],
                                    'libraries'    : { 'fftwLibs' : ['fftw3'] }
                                  },
                  },
@@ -305,13 +308,13 @@ allExternalLibraries = {
                                    'libraries'    : { 'apeLibs' : [ 'apelib' ] } },
                      },
                    'conda' :
-                   { 'default' : { 'version'      : '2.9',
+                   { 'default' : { 'version'      : '3',
                                    'top'          : os.path.join('$CONDA'),
                                    'include-path' : os.path.join('$TOP', 'include'),
                                    'lib-path'     : os.path.join('$TOP', 'lib'),
                                    'ld-path'      : '$LIB-PATH',
                                    'includes'     : [ 'ape/ape_list.h' ],
-                                   'libraries'    : { 'apeLibs' : [ 'ape_2.9', 'readline', 'termcap' ] }
+                                   'libraries'    : { 'apeLibs' : [ 'ape_3', 'readline', 'tinfo' ] }
                                  },
                    },
 
@@ -774,18 +777,17 @@ allExternalLibraries = {
 
                  },
                     'conda' :
-                    { 'default' : { 'version'      : 'v5.34.34',
+                    { 'default' : { 'version'      : '6',
                                     'top'          : os.path.join('$CONDA'),
-                                    'include-path' : os.path.join('$TOP', 'include', 'root'),
-                                    'lib-path'     : os.path.join('$TOP', 'lib', 'root'),
+                                    'include-path' : os.path.join('$TOP', 'include', '$NAME'),
+                                    'lib-path'     : os.path.join('$TOP', 'lib'),
                                     'ld-path'      : '$LIB-PATH',
                                     'bin-path'     : os.path.join('$TOP', 'bin'),
                                     'includes'     : [ 'RVersion.h' ],
                                     'libraries'    :
-                                    { 'rootLibs'    : [ 'Tree', 'Net', 'Gpad', 'Graf', 'RIO', 'Hist', 'Physics', 'Matrix', 'Core', 'Cint', 'MathCore', 'Thread', 'pthread', 'm', 'dl' ],
-                                      'rootGuiLibs' : [ 'Rint', 'Postscript', 'TreePlayer', 'Tree', 'Net', 'Graf3d', 'Gui', 'HistPainter', 'Gpad' ],
-                                      'minuitLibs'  : [ 'Minuit2', 'Minuit', 'Graf', 'RIO', 'Hist', 'Matrix', 'Core', 'Cint', 'dl' ],
-                                      'rootTMineLibs' : [ 'TreePlayer', 'XMLIO', 'Ged', 'MLP', 'TMVA', 'Rint', 'Html']
+                                    { 'rootLibs'    : [ 'Tree', 'Net', 'Gpad', 'Graf', 'RIO', 'Hist', 'Physics', 'Matrix', 'Core', 'pthread', 'm', 'dl'],
+                                      'rootGuiLibs' : [ 'MathCore', 'Thread', 'Rint', 'Postscript', 'TreePlayer', 'Tree', 'Net', 'Graf3d', 'Gui', 'HistPainter', 'Gpad' ],
+                                      'minuitLibs'  : [ 'Minuit2', 'Minuit', 'Graf', 'RIO', 'Hist', 'Matrix', 'Core', 'dl' ]
                                     }
                                   },
                       'darwin' : { 'dylib-path' : '$LIB-PATH' }
@@ -1332,12 +1334,13 @@ allExternalLibraries = {
 
                    },
                    'conda':
-                   { 'default': { 'version'      : '3.4-gl4',
+                   { 'default': { 
+                       'version'      : '0.0.2',
                        'top'          : os.path.join('$CONDA'),
                        'include-path' : os.path.join('$TOP', 'include'),
                        'lib-path'     : os.path.join('$TOP', 'lib'),
                        'ld-path'      : '$LIB-PATH',
-                       'libraries'    : { 'f2cLibs' : ['f2c'] },
+                       'libraries'    : { 'f2cLibs' : ['f2c', 'm'] },
                      }
                    },
                  },

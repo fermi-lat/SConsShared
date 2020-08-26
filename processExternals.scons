@@ -59,6 +59,9 @@ def setupOptions(name, configuredExternal):
     if 'bin-path' in configuredExternal:
         AddOption('--with-'+name+'-binaries', dest = name+'-binaries', nargs=1, type='string', action='store',
                   metavar='DIR', help='location of '+name+' '+configuredExternal['version']+' binaries')
+    if 'cxxflags' in configuredExternal:
+        AddOption('--with-'+name+'-cxxflags', dest = name+'-cxxflags', nargs=1, type='string', action='store',
+                  metavar='FLAGS', help='location of '+name+' '+configuredExternal['version']+' cxxflags')
 
     if baseEnv.GetOption(external['name']):
         if 'top' in configuredExternal:
@@ -70,6 +73,8 @@ def setupOptions(name, configuredExternal):
                 configuredExternal['lib-path'] = os.path.join(baseEnv.GetOption(external['name']), 'lib')
             if 'bin-path' in configuredExternal:
                 configuredExternal['bin-path'] = os.path.join(baseEnv.GetOption(external['name']), 'bin')
+            if 'cxxflags' in configuredExternal:
+                configuredExternal['cxxflags'] = os.path.join(baseEnv.GetOption(external['name']), 'cxxflags')
     else:
         if 'include-path' in configuredExternal and baseEnv.GetOption(external['name']+'-includes'):
             configuredExternal['include-path'] = baseEnv.GetOption(external['name']+'-includes')
@@ -77,6 +82,8 @@ def setupOptions(name, configuredExternal):
             configuredExternal['lib-path'] = baseEnv.GetOption(external['name']+'-libraries')
         if 'bin-path' in configuredExternal and baseEnv.GetOption(external['name']+'-binaries'):
             configuredExternal['bin-path'] = baseEnv.GetOption(external['name']+'-binaries')
+        if 'cxxflags' in configuredExternal and baseEnv.GetOption(external['name']+'-cxxflags'):
+            configuredExternal['cxxflags'] = baseEnv.GetOption(external['name']+'-cxxflags')
     return configuredExternal
 
 def replace(string, variable, substitute):
@@ -134,6 +141,7 @@ def substituteVars(name, version, configuredExternal):
     return configuredExternal
 
 def setupEnvironment(configuredExternal):
+    
     #Add Paths to base environment
     if 'include-path' in configuredExternal:
         baseEnv.AppendUnique(CPPPATH = [configuredExternal['include-path']])
@@ -151,6 +159,7 @@ def setupEnvironment(configuredExternal):
         if(baseEnv.GetOption('CONDA-EXT')):
             wrapperbin = wrapperbin.replace(baseEnv['CONDAEXTvalue'], '$CONDA')
         baseEnv.AppendUnique(WRAPPERBINS = [wrapperbin])
+    
     if 'ld-path' in configuredExternal:
         wrapperlib = configuredExternal['ld-path']
         if(baseEnv.GetOption('GLAST-EXT')):
@@ -159,6 +168,17 @@ def setupEnvironment(configuredExternal):
             wrapperlib = wrapperlib.replace(baseEnv['CONDAEXTvalue'], '$CONDA')
         if wrapperlib != "$LIB-PATH":
             baseEnv.AppendUnique(WRAPPERLIBS = [wrapperlib])
+
+    if 'ld-flags' in configuredExternal:
+        for define in configuredExternal['ld-flags']:
+            these_options = define.split(" ")
+            # if baseEnv['PLATFORM'] == 'darwin':
+            #     # Need to check whether openmp is in the options
+            #     # and remove it in this case, since it is not suppored
+            #     # on Mac
+            #     if '-fopenmp' in these_options:
+            #         these_options.pop(these_options.index('-fopenmp'))
+            baseEnv.AppendUnique(LINKFLAGS = these_options)
 
     #Add library groups to base environment
     if 'libraries' in configuredExternal:
@@ -196,9 +216,13 @@ def checkEnvironment(configuredExternal):
                 Exit(1);
             else:
                 print 'yes'
+    
     conf.Finish()
 
 def setupRoot(configuredExternal):
+    if 'ld-flags' in configuredExternal:
+        for define in configuredExternal['ld-flags']:
+            baseEnv.AppendUnique(LINKFLAGS = define.split(" "))
     if 'lib-path' in configuredExternal:
         baseEnv.AppendENVPath('LD_LIBRARY_PATH', [configuredExternal['lib-path']])
     if 'dylib-path' in configuredExternal:
