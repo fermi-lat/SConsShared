@@ -131,7 +131,7 @@ if baseEnv.GetOption('opt'):
     baseEnv.AppendUnique(CCFLAGS = '-O2')
     variant+='-Optimized'
 
-if baseEnv.Getoption('noroot'):
+if baseEnv.GetOption('noroot'):
     baseEnv.AppendUnique(CPPDEFINES = ['BUILD_WITHOUT_ROOT'])
 
 if baseEnv.GetOption('ccflags'):
