@@ -90,6 +90,7 @@ AddOption('--externalsList', dest='externalsList', action='store', nargs='?', co
 AddOption('--conda', dest='CONDA-EXT', nargs=1, type='string', action='store',
         metavar='DIR',
         help='Path to conda prefix. Override normal external version checking and pathing.')
+AddOption('--without-root', dest='noroot', action='store_true', help='Compile without ROOT-dependant code')
 
 if baseEnv.GetOption('cc'):
     baseEnv.Replace(CC = baseEnv.GetOption('cc'))
@@ -129,6 +130,9 @@ if baseEnv.GetOption('debug'):
 if baseEnv.GetOption('opt'):
     baseEnv.AppendUnique(CCFLAGS = '-O2')
     variant+='-Optimized'
+
+if baseEnv.Getoption('noroot'):
+    baseEnv.AppendUnique(CPPDEFINES = ['BUILD_WITHOUT_ROOT'])
 
 if baseEnv.GetOption('ccflags'):
     baseEnv.AppendUnique(CCFLAGS = baseEnv.GetOption('ccflags').strip().split(" "))
