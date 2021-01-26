@@ -1,3 +1,5 @@
+Import('noroot')
+
 # -*- python -*-
 import os
 import sys
@@ -3111,6 +3113,10 @@ allExternalLibraries = {
                          },
                    }
     }
+
+if noroot:
+    del allExternalLibraries['ROOT']
+    
 Return("allExternalLibraries")
 
 # Need an analog of the following code from CMT requirements for ldf:
