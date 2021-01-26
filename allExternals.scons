@@ -3114,7 +3114,9 @@ allExternalLibraries = {
                    }
     }
 
-if noroot:
+print("NOROOT VALUE: ", noroot)
+
+if noroot == True:
     del allExternalLibraries['ROOT']
     
 Return("allExternalLibraries")
