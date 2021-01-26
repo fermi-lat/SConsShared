@@ -343,6 +343,459 @@ allExternalLibraries = {
 
                  },
 
+    'ROOT'     : { 'v5.18.00b' :
+                   { 'default' : { 'version'      : 'v5.18.00b',
+                                   'top'          : os.path.join('$GLAST_EXT', '$NAME', '$VERSION', '$COMPILER'),
+                                   'include-path' : os.path.join('$TOP', 'include'),
+                                   'lib-path'     : os.path.join('$TOP', 'lib'),
+                                   'ld-path'      : '$LIB-PATH',
+                                   'bin-path'     : os.path.join('$TOP', 'bin'),
+                                   'includes'     : ['RVersion.h' ],
+                                   'libraries'    : { 'rootLibs'    : ['Tree', 'Net', 'Gpad', 'Graf', 'RIO', 'Hist',
+                                                                       'Physics', 'Matrix', 'Core','Cint','pthread', 'm', 'dl'],
+                                                      'rootGuiLibs' : [ 'Rint', 'Postscript', 'TreePlayer', 'Tree', 'Net',
+                                                                        'Graf3d', 'Gui', 'HistPainter', 'Gpad' ],
+                                                      'minuitLibs'  : [ 'Minuit2', 'Minuit', 'Graf', 'RIO', 'Hist', 'Matrix',
+                                                                        'Core', 'Cint', 'dl' ]
+                                                    }
+                                 },
+                     'win32' : { 'libraries'      :
+                                 { 'rootLibs'    : [ 'libCore', 'libCint', 'libRIO', 'libNet', 'libTree', 'libHist', 'libGraf',
+                                                     'libGpad', 'libMatrix', 'libPhysics' ],
+                                   'rootGuiLibs' : [ 'libHist', 'libGraf', 'libGraf3d', 'libGpad', 'libRint', 'libPostscript',
+                                                     'libTreePlayer', 'libGui', 'libHistPainter' ],
+                                   'minuitLibs'  : [ 'libMinuit2' ]
+                                 }
+                               },
+                     'darwin' : { 'dylib-path'   : '$LIB-PATH' }
+                   },
+                   'v5.18.00c-gl1' :
+                   { 'default' : { 'version'      : 'v5.18.00c-gl1',
+                                   'top'          : os.path.join('$GLAST_EXT', '$NAME', '$VERSION', '$COMPILER'),
+                                   'include-path' : os.path.join('$TOP', 'include'),
+                                   'lib-path'     : os.path.join('$TOP', 'lib'),
+                                   'ld-path'      : '$LIB-PATH',
+                                   'bin-path'     : os.path.join('$TOP', 'bin'),
+                                   'includes'     : [ 'RVersion.h' ],
+                                   'libraries'    :
+                                   { 'rootLibs'    : [ 'Tree', 'Net', 'Gpad', 'Graf', 'RIO', 'Hist', 'Physics', 'Matrix',
+                                                       'Core', 'Cint', 'pthread', 'm', 'dl' ],
+                                     'rootGuiLibs' : [ 'Rint', 'Postscript', 'TreePlayer', 'Tree', 'Net', 'Graf3d', 'Gui',
+                                                       'HistPainter', 'Gpad' ],
+                                     'minuitLibs'  : [ 'Minuit2', 'Minuit', 'Graf', 'RIO', 'Hist', 'Matrix', 'Core',
+                                                       'Cint', 'dl' ]
+                                     }
+                                   },
+                     'win32'   : { 'libraries'    :
+                                   { 'rootLibs'    : [ 'libCore', 'libCint', 'libRIO', 'libNet', 'libTree', 'libHist',
+                                                       'libGraf', 'libGpad', 'libMatrix', 'libPhysics' ],
+                                     'rootGuiLibs' : [ 'libHist', 'libGraf', 'libGraf3d', 'libGpad', 'libRint',
+                                                       'libPostscript', 'libTreePlayer', 'libGui', 'libHistPainter' ],
+                                     'minuitLibs'  : [ 'libMinuit2' ]
+                                   }
+                                 },
+                     'darwin' : { 'dylib-path' : '$LIB-PATH' }
+                   },
+                   'v5.20.00-gl1' :
+                   { 'default' : { 'version'      : 'v5.20.00-gl1',
+                                   'top'          : os.path.join('$GLAST_EXT', '$NAME', '$VERSION', '$COMPILER'),
+                                   'include-path' : os.path.join('$TOP', 'include'),
+                                   'lib-path'     : os.path.join('$TOP', 'lib'),
+                                   'ld-path'      : '$LIB-PATH',
+                                   'bin-path'     : os.path.join('$TOP', 'bin'),
+                                   'includes'     : [ 'RVersion.h' ],
+                                   'libraries'    : { 'rootLibs'    : [ 'Tree', 'Net', 'Gpad', 'Graf', 'RIO', 'Hist', 'Physics', 'Matrix', 'Core', 'Cint', 'pthread', 'm', 'dl' ],
+                                                      'rootGuiLibs' : [ 'Rint', 'Postscript', 'TreePlayer', 'Tree', 'Net', 'Graf3d', 'Gui', 'HistPainter', 'Gpad' ],
+                                                      'minuitLibs'  : [ 'Minuit2', 'Minuit', 'Graf', 'RIO', 'Hist', 'Matrix', 'Core', 'Cint', 'dl' ]
+                                                    }
+                                 },
+                     'win32'   : { 'libraries'    : { 'rootLibs'    : [ 'libCore', 'libCint', 'libRIO', 'libNet', 'libTree', 'libHist','libGraf','libGpad','libMatrix','libPhysics'],
+                                                      'rootGuiLibs' : [ 'libHist', 'libGraf', 'libGraf3d', 'libGpad','libRint', 'libPostscript', 'libTreePlayer', 'libGui', 'libHistPainter' ],
+                                                      'minuitLibs'  : [ 'libMinuit2' ]
+                                                    }
+                                 },
+                     'darwin' : { 'dylib-path' : '$LIB-PATH' }
+                   },
+                   'v5.20.00-gl3' :
+                   { 'default' : { 'version'      : 'v5.20.00-gl3',
+                                   'top'          : os.path.join('$GLAST_EXT', '$NAME', '$VERSION', '$COMPILER'),
+                                   'include-path' : os.path.join('$TOP', 'include'),
+                                   'lib-path'     : os.path.join('$TOP', 'lib'),
+                                   'ld-path'      : '$LIB-PATH',
+                                   'bin-path'     : os.path.join('$TOP', 'bin'),
+                                   'includes'     : [ 'RVersion.h' ],
+                                   'libraries'    :
+                                   { 'rootLibs'    : [ 'Tree', 'Net', 'Gpad', 'Graf', 'RIO', 'Hist', 'Physics',
+                                                       'Matrix', 'Core', 'Cint', 'pthread', 'm', 'dl' ],
+                                     'rootGuiLibs' : [ 'Rint', 'Postscript', 'TreePlayer', 'Tree', 'Net',
+                                                       'Graf3d', 'Gui', 'HistPainter', 'Gpad' ],
+                                     'minuitLibs'  : [ 'Minuit2', 'Minuit', 'Graf', 'RIO', 'Hist', 'Matrix',
+                                                       'Core', 'Cint', 'dl' ]
+                                     }
+                                   },
+                     'win32'   : { 'libraries'    :
+                                   { 'rootLibs'    : [ 'libCore', 'libCint', 'libRIO', 'libNet', 'libTree',
+                                                       'libHist','libGraf','libGpad','libMatrix','libPhysics'],
+                                     'rootGuiLibs' : [ 'libHist', 'libGraf', 'libGraf3d', 'libGpad','libRint',
+                                                       'libPostscript', 'libTreePlayer', 'libGui', 'libHistPainter' ],
+                                     'minuitLibs'  : [ 'libMinuit2' ]
+                                   }
+                                 },
+                     'darwin' : { 'dylib-path' : '$LIB-PATH' }
+                   },
+                   'v5.20.00-gl4' :
+                   { 'default' : { 'version'      : 'v5.20.00-gl4',
+                                   'top'          : os.path.join('$GLAST_EXT', '$NAME', '$VERSION', '$COMPILER'),
+                                   'include-path' : os.path.join('$TOP', 'include'),
+                                   'lib-path'     : os.path.join('$TOP', 'lib'),
+                                   'ld-path'      : '$LIB-PATH',
+                                   'bin-path'     : os.path.join('$TOP', 'bin'),
+                                   'includes'     : [ 'RVersion.h' ],
+                                   'libraries'    :
+                                   { 'rootLibs'    : [ 'Tree', 'Net', 'Gpad', 'Graf', 'RIO', 'Hist', 'Physics',
+                                                       'Matrix', 'Core', 'Cint', 'pthread', 'm', 'dl' ],
+                                     'rootGuiLibs' : [ 'Rint', 'Postscript', 'TreePlayer', 'Tree', 'Net',
+                                                       'Graf3d', 'Gui', 'HistPainter', 'Gpad' ],
+                                     'minuitLibs'  : [ 'Minuit2', 'Minuit', 'Graf', 'RIO', 'Hist', 'Matrix',
+                                                       'Core', 'Cint', 'dl' ]
+                                     }
+                                   },
+                     'win32'   : { 'libraries'    :
+                                   { 'rootLibs'    : [ 'libCore', 'libCint', 'libRIO', 'libNet', 'libTree',
+                                                       'libHist','libGraf','libGpad','libMatrix','libPhysics'],
+                                     'rootGuiLibs' : [ 'libHist', 'libGraf', 'libGraf3d', 'libGpad','libRint',
+                                                       'libPostscript', 'libTreePlayer', 'libGui', 'libHistPainter' ],
+                                     'minuitLibs'  : [ 'libMinuit2' ]
+                                   }
+                                 },
+                     'darwin' : { 'dylib-path' : '$LIB-PATH' }
+                   },
+                   'v5.20.00-gl5' :
+                   { 'default' : { 'version'      : 'v5.20.00-gl5',
+                                   'top'          : os.path.join('$GLAST_EXT', '$NAME', '$VERSION', '$COMPILER'),
+                                   'include-path' : os.path.join('$TOP', 'include'),
+                                   'lib-path'     : os.path.join('$TOP', 'lib'),
+                                   'ld-path'      : '$LIB-PATH',
+                                   'bin-path'     : os.path.join('$TOP', 'bin'),
+                                   'includes'     : [ 'RVersion.h' ],
+                                   'libraries'    :
+                                   { 'rootLibs'    : [ 'Tree', 'Net', 'Gpad', 'Graf', 'RIO', 'Hist', 'Physics', 'Matrix', 'Core', 'Cint', 'MathCore', 'Thread', 'pthread', 'm', 'dl' ],
+                                     'rootGuiLibs' : [ 'Rint', 'Postscript', 'TreePlayer', 'Tree', 'Net', 'Graf3d', 'Gui', 'HistPainter', 'Gpad' ],
+                                     'minuitLibs'  : [ 'Minuit2', 'Minuit', 'Graf', 'RIO', 'Hist', 'Matrix', 'Core', 'Cint', 'dl' ]
+                                   }
+                                 },
+                     'win32'   : { 'libraries'    :
+                                   { 'rootLibs'    : [ 'libCore', 'libCint', 'libRIO', 'libNet', 'libTree', 'libHist','libGraf','libGpad','libMatrix','libPhysics', 'libMathCore', 'libThread'],
+                                     'rootGuiLibs' : [ 'libHist', 'libGraf', 'libGraf3d', 'libGpad','libRint', 'libPostscript', 'libTreePlayer', 'libGui', 'libHistPainter' ],
+                                     'minuitLibs'  : [ 'libMinuit2' ]
+                                   }
+                                 },
+                     'darwin' : { 'dylib-path' : '$LIB-PATH' }
+                   },
+                   'v5.26.00a' :
+                   { 'default' : { 'version'      : 'v5.26.00a-gl1',
+                                   'top'          : os.path.join('$GLAST_EXT', '$NAME', '$VERSION', '$COMPILER'),
+                                   'include-path' : os.path.join('$TOP', 'include'),
+                                   'lib-path'     : os.path.join('$TOP', 'lib'),
+                                   'ld-path'      : '$LIB-PATH',
+                                   'bin-path'     : os.path.join('$TOP', 'bin'),
+                                   'includes'     : [ 'RVersion.h' ],
+                                   'libraries'    :
+                                   { 'rootLibs'    : [ 'Tree', 'Net', 'Gpad', 'Graf', 'RIO', 'Hist', 'Physics', 'Matrix', 'Core', 'Cint', 'MathCore', 'Thread', 'pthread', 'm', 'dl' ],
+                                     'rootGuiLibs' : [ 'Rint', 'Postscript', 'TreePlayer', 'Tree', 'Net', 'Graf3d', 'Gui', 'HistPainter', 'Gpad' ],
+                                     'minuitLibs'  : [ 'Minuit2', 'Minuit', 'Graf', 'RIO', 'Hist', 'Matrix', 'Core', 'Cint', 'dl' ],
+                                     'rootTMineLibs' : [ 'TreePlayer', 'XMLIO', 'Ged', 'MLP', 'TMVA', 'Rint', 'Html']
+                                   }
+                                 },
+                     'win32'   : { 'libraries'    :
+                                   { 'rootLibs'    : [ 'libCore', 'libCint', 'libRIO', 'libNet', 'libTree', 'libHist','libGraf','libGpad','libMatrix','libPhysics', 'libMathCore', 'libThread'],
+                                     'rootGuiLibs' : [ 'libHist', 'libGraf', 'libGraf3d', 'libGpad','libRint', 'libPostscript', 'libTreePlayer', 'libGui', 'libHistPainter' ],
+                                     'minuitLibs'  : [ 'libMinuit2' ],
+                                     'rootTMineLibs': [ 'libTreePlayer', 'libXMLIO', 'libGed', 'libMLP', 'libTMVA', 'libRint', 'libHtml']
+                                   }
+                                 },
+                     'darwin' : { 'dylib-path' : '$LIB-PATH' }
+                   },
+
+                   'v5.26.00a-i1' :
+                   { 'default' : { 'version'      : 'v5.26.00a-gl2',
+                                   'top'          : os.path.join('$GLAST_EXT', '$NAME', '$VERSION', '$COMPILER'),
+                                   'include-path' : os.path.join('$TOP', 'include'),
+                                   'lib-path'     : os.path.join('$TOP', 'lib'),
+                                   'ld-path'      : '$LIB-PATH',
+                                   'bin-path'     : os.path.join('$TOP', 'bin'),
+                                   'includes'     : [ 'RVersion.h' ],
+                                   'libraries'    :
+                                   { 'rootLibs'    : [ 'Tree', 'Net', 'Gpad', 'Graf', 'RIO', 'Hist', 'Physics', 'Matrix', 'Core', 'Cint', 'MathCore', 'Thread', 'pthread', 'm', 'dl' ],
+                                     'rootGuiLibs' : [ 'Rint', 'Postscript', 'TreePlayer', 'Tree', 'Net', 'Graf3d', 'Gui', 'HistPainter', 'Gpad' ],
+                                     'minuitLibs'  : [ 'Minuit2', 'Minuit', 'Graf', 'RIO', 'Hist', 'Matrix', 'Core', 'Cint', 'dl' ],
+                                     'rootTMineLibs' : [ 'TreePlayer', 'XMLIO', 'Ged', 'MLP', 'TMVA', 'Rint', 'Html']
+                                   }
+                                 },
+                     'win32'   : { 'libraries'    :
+                                   { 'rootLibs'    : [ 'libCore', 'libCint', 'libRIO', 'libNet', 'libTree', 'libHist','libGraf','libGpad','libMatrix','libPhysics', 'libMathCore', 'libThread'],
+                                     'rootGuiLibs' : [ 'libHist', 'libGraf', 'libGraf3d', 'libGpad','libRint', 'libPostscript', 'libTreePlayer', 'libGui', 'libHistPainter' ],
+                                     'minuitLibs'  : [ 'libMinuit2', 'libMinuit' ],
+                                     'rootTMineLibs': [ 'libTreePlayer', 'libXMLIO', 'libGed', 'libMLP', 'libTMVA', 'libRint', 'libHtml']
+                                   }
+                                 },
+                     'darwin' : { 'dylib-path' : '$LIB-PATH' }
+                   },
+                   'v5.26.00a-i2' :
+                   { 'default' : { 'version'      : 'v5.26.00a-gl3',
+                                   'top'          : os.path.join('$GLAST_EXT', '$NAME', '$VERSION', '$COMPILER'),
+                                   'include-path' : os.path.join('$TOP', 'include'),
+                                   'lib-path'     : os.path.join('$TOP', 'lib'),
+                                   'ld-path'      : '$LIB-PATH',
+                                   'bin-path'     : os.path.join('$TOP', 'bin'),
+                                   'includes'     : [ 'RVersion.h' ],
+                                   'libraries'    :
+                                   { 'rootLibs'    : [ 'Tree', 'Net', 'Gpad', 'Graf', 'RIO', 'Hist', 'Physics', 'Matrix', 'Core', 'Cint', 'MathCore', 'Thread', 'pthread', 'm', 'dl' ],
+                                     'rootGuiLibs' : [ 'Rint', 'Postscript', 'TreePlayer', 'Tree', 'Net', 'Graf3d', 'Gui', 'HistPainter', 'Gpad' ],
+                                     'minuitLibs'  : [ 'Minuit2', 'Minuit', 'Graf', 'RIO', 'Hist', 'Matrix', 'Core', 'Cint', 'dl' ],
+                                     'rootTMineLibs' : [ 'TreePlayer', 'XMLIO', 'Ged', 'MLP', 'TMVA', 'Rint', 'Html']
+                                   }
+                                 },
+                     'win32'   : { 'libraries'    :
+                                   { 'rootLibs'    : [ 'libCore', 'libCint', 'libRIO', 'libNet', 'libTree', 'libHist','libGraf','libGpad','libMatrix','libPhysics', 'libMathCore', 'libThread'],
+                                     'rootGuiLibs' : [ 'libHist', 'libGraf', 'libGraf3d', 'libGpad','libRint', 'libPostscript', 'libTreePlayer', 'libGui', 'libHistPainter' ],
+                                     'minuitLibs'  : [ 'libMinuit2', 'libMinuit' ],
+                                     'rootTMineLibs': [ 'libTreePlayer', 'libXMLIO', 'libGed', 'libMLP', 'libTMVA', 'libRint', 'libHtml']
+                                   }
+                                 },
+                     'vc90-debug' : { 'version' : 'v5.26.00a-gl3-dbg'},
+                     'darwin' : { 'dylib-path' : '$LIB-PATH' }
+                   },
+                   'v5.26.00a-i3' :
+                   { 'default' : { 'version'      : 'v5.26.00a-gl4',
+                                   'top'          : os.path.join('$GLAST_EXT', '$NAME', '$VERSION', '$COMPILER'),
+                                   'include-path' : os.path.join('$TOP', 'include'),
+                                   'lib-path'     : os.path.join('$TOP', 'lib'),
+                                   'ld-path'      : '$LIB-PATH',
+                                   'bin-path'     : os.path.join('$TOP', 'bin'),
+                                   'includes'     : [ 'RVersion.h' ],
+                                   'libraries'    :
+                                   { 'rootLibs'    : [ 'Tree', 'Net', 'Gpad', 'Graf', 'RIO', 'Hist', 'Physics', 'Matrix', 'Core', 'Cint', 'MathCore', 'Thread', 'pthread', 'm', 'dl' ],
+                                     'rootGuiLibs' : [ 'Rint', 'Postscript', 'TreePlayer', 'Tree', 'Net', 'Graf3d', 'Gui', 'HistPainter', 'Gpad' ],
+                                     'minuitLibs'  : [ 'Minuit2', 'Minuit', 'Graf', 'RIO', 'Hist', 'Matrix', 'Core', 'Cint', 'dl' ],
+                                     'rootTMineLibs' : [ 'TreePlayer', 'XMLIO', 'Ged', 'MLP', 'TMVA', 'Rint', 'Html']
+                                   }
+                                 },
+                     'win32'   : { 'libraries'    :
+                                   { 'rootLibs'    : [ 'libCore', 'libCint', 'libRIO', 'libNet', 'libTree', 'libHist','libGraf','libGpad','libMatrix','libPhysics', 'libMathCore', 'libThread'],
+                                     'rootGuiLibs' : [ 'libHist', 'libGraf', 'libGraf3d', 'libGpad','libRint', 'libPostscript', 'libTreePlayer', 'libGui', 'libHistPainter' ],
+                                     'minuitLibs'  : [ 'libMinuit2', 'libMinuit' ],
+                                     'rootTMineLibs': [ 'libTreePlayer', 'libXMLIO', 'libGed', 'libMLP', 'libTMVA', 'libRint', 'libHtml']
+                                   }
+                                 },
+                     'darwin' : { 'dylib-path' : '$LIB-PATH' }
+                   },
+                   'v5.26.00a-i4' :
+                   { 'default' : { 'version'      : 'v5.26.00a-gl5',
+                                   'top'          : os.path.join('$GLAST_EXT', '$NAME', '$VERSION', '$COMPILER'),
+                                   'include-path' : os.path.join('$TOP', 'include'),
+                                   'lib-path'     : os.path.join('$TOP', 'lib'),
+                                   'ld-path'      : '$LIB-PATH',
+                                   'bin-path'     : os.path.join('$TOP', 'bin'),
+                                   'includes'     : [ 'RVersion.h' ],
+                                   'libraries'    :
+                                   { 'rootLibs'    : [ 'Tree', 'Net', 'Gpad', 'Graf', 'RIO', 'Hist', 'Physics', 'Matrix', 'Core', 'Cint', 'MathCore', 'Thread', 'pthread', 'm', 'dl' ],
+                                     'rootGuiLibs' : [ 'Rint', 'Postscript', 'TreePlayer', 'Tree', 'Net', 'Graf3d', 'Gui', 'HistPainter', 'Gpad' ],
+                                     'minuitLibs'  : [ 'Minuit2', 'Minuit', 'Graf', 'RIO', 'Hist', 'Matrix', 'Core', 'Cint', 'dl' ],
+                                     'rootTMineLibs' : [ 'TreePlayer', 'XMLIO', 'Ged', 'MLP', 'TMVA', 'Rint', 'Html']
+                                   }
+                                 },
+                     'win32'   : { 'libraries'    :
+                                   { 'rootLibs'    : [ 'libCore', 'libCint', 'libRIO', 'libNet', 'libTree', 'libHist','libGraf','libGpad','libMatrix','libPhysics', 'libMathCore', 'libThread'],
+                                     'rootGuiLibs' : [ 'libHist', 'libGraf', 'libGraf3d', 'libGpad','libRint', 'libPostscript', 'libTreePlayer', 'libGui', 'libHistPainter' ],
+                                     'minuitLibs'  : [ 'libMinuit2', 'libMinuit' ],
+                                     'rootTMineLibs': [ 'libTreePlayer', 'libXMLIO', 'libGed', 'libMLP', 'libTMVA', 'libRint', 'libHtml']
+                                   }
+                                 },
+                     'darwin' : { 'dylib-path' : '$LIB-PATH' }
+                   },
+                   'v5.26.00a-i5' :
+                   { 'default' : { 'version'      : 'v5.26.00a-gl6',
+                                   'top'          : os.path.join('$GLAST_EXT', '$NAME', '$VERSION', '$COMPILER'),
+                                   'include-path' : os.path.join('$TOP', 'include'),
+                                   'lib-path'     : os.path.join('$TOP', 'lib'),
+                                   'ld-path'      : '$LIB-PATH',
+                                   'bin-path'     : os.path.join('$TOP', 'bin'),
+                                   'includes'     : [ 'RVersion.h' ],
+                                   'libraries'    :
+                                   { 'rootLibs'    : [ 'Tree', 'Net', 'Gpad', 'Graf', 'RIO', 'Hist', 'Physics', 'Matrix', 'Core', 'Cint', 'MathCore', 'Thread', 'pthread', 'm', 'dl' ],
+                                     'rootGuiLibs' : [ 'Rint', 'Postscript', 'TreePlayer', 'Tree', 'Net', 'Graf3d', 'Gui', 'HistPainter', 'Gpad' ],
+                                     'minuitLibs'  : [ 'Minuit2', 'Minuit', 'Graf', 'RIO', 'Hist', 'Matrix', 'Core', 'Cint', 'dl' ],
+                                     'rootTMineLibs' : [ 'TreePlayer', 'XMLIO', 'Ged', 'MLP', 'TMVA', 'Rint', 'Html']
+                                   }
+                                 },
+                     'win32'   : { 'libraries'    :
+                                   { 'rootLibs'    : [ 'libCore', 'libCint', 'libRIO', 'libNet', 'libTree', 'libHist','libGraf','libGpad','libMatrix','libPhysics', 'libMathCore', 'libThread'],
+                                     'rootGuiLibs' : [ 'libHist', 'libGraf', 'libGraf3d', 'libGpad','libRint', 'libPostscript', 'libTreePlayer', 'libGui', 'libHistPainter' ],
+                                     'minuitLibs'  : [ 'libMinuit2', 'libMinuit' ],
+                                     'rootTMineLibs': [ 'libTreePlayer', 'libXMLIO', 'libGed', 'libMLP', 'libTMVA', 'libRint', 'libHtml']
+                                   }
+                                 },
+                     'darwin' : { 'dylib-path' : '$LIB-PATH' }
+                   },
+                   'v5.26.00a-i6' :
+                   { 'default' : { 'version'      : 'v5.26.00a-gl7',
+                                   'top'          : os.path.join('$GLAST_EXT', '$NAME', '$VERSION'),
+                                   'include-path' : os.path.join('$TOP', 'include'),
+                                   'lib-path'     : os.path.join('$TOP', 'lib'),
+                                   'ld-path'      : '$LIB-PATH',
+                                   'bin-path'     : os.path.join('$TOP', 'bin'),
+                                   'includes'     : [ 'RVersion.h' ],
+                                   'libraries'    :
+                                   { 'rootLibs'    : [ 'Tree', 'Net', 'Gpad', 'Graf', 'RIO', 'Hist', 'Physics', 'Matrix', 'Core', 'Cint', 'MathCore', 'Thread', 'pthread', 'm', 'dl' ],
+                                     'rootGuiLibs' : [ 'Rint', 'Postscript', 'TreePlayer', 'Tree', 'Net', 'Graf3d', 'Gui', 'HistPainter', 'Gpad' ],
+                                     'minuitLibs'  : [ 'Minuit2', 'Minuit', 'Graf', 'RIO', 'Hist', 'Matrix', 'Core', 'Cint', 'dl' ],
+                                     'rootTMineLibs' : [ 'TreePlayer', 'XMLIO', 'Ged', 'MLP', 'TMVA', 'Rint', 'Html']
+                                   }
+                                 },
+                     'gcc34' :  { 'version'       : 'v5.26.00a-gl6',
+                                   'top'           : os.path.join('$GLAST_EXT', '$NAME', '$VERSION', '$COMPILER'),
+                                  },
+                     'win32'   : { 'version'       : 'v5.26.00a-gl6',
+                                   'top'           : os.path.join('$GLAST_EXT', '$NAME', '$VERSION', '$COMPILER'),
+                                   'libraries'    :
+                                   { 'rootLibs'    : [ 'libCore', 'libCint', 'libRIO', 'libNet', 'libTree', 'libHist','libGraf','libGpad','libMatrix','libPhysics', 'libMathCore', 'libThread'],
+                                     'rootGuiLibs' : [ 'libHist', 'libGraf', 'libGraf3d', 'libGpad','libRint', 'libPostscript', 'libTreePlayer', 'libGui', 'libHistPainter' ],
+                                     'minuitLibs'  : [ 'libMinuit2', 'libMinuit' ],
+                                     'rootTMineLibs': [ 'libTreePlayer', 'libXMLIO', 'libGed', 'libMLP', 'libTMVA', 'libRint', 'libHtml']
+                                   }
+                                 },
+                     'darwin' : { 'dylib-path' : '$LIB-PATH' }
+                   },
+                   'v5.34.01' :
+                   { 'default' : { 'version'      : 'v5.34.01',
+                                   'top'          : os.path.join('$GLAST_EXT', '$NAME', '$VERSION'),
+                                   'include-path' : os.path.join('$TOP', 'include'),
+                                   'lib-path'     : os.path.join('$TOP', 'lib'),
+                                   'ld-path'      : '$LIB-PATH',
+                                   'bin-path'     : os.path.join('$TOP', 'bin'),
+                                   'includes'     : [ 'RVersion.h' ],
+                                   'libraries'    :
+                                   { 'rootLibs'    : [ 'Tree', 'Net', 'Gpad', 'Graf', 'RIO', 'Hist', 'Physics', 'Matrix', 'Core', 'Cint', 'MathCore', 'Thread', 'pthread', 'm', 'dl' ],
+                                     'rootGuiLibs' : [ 'Rint', 'Postscript', 'TreePlayer', 'Tree', 'Net', 'Graf3d', 'Gui', 'HistPainter', 'Gpad' ],
+                                     'minuitLibs'  : [ 'Minuit2', 'Minuit', 'Graf', 'RIO', 'Hist', 'Matrix', 'Core', 'Cint', 'dl' ],
+                                     'rootTMineLibs' : [ 'TreePlayer', 'XMLIO', 'Ged', 'MLP', 'TMVA', 'Rint', 'Html']
+                                   }
+                                 },
+                     'gcc34' :  { 'version'       : 'v5.26.00a-gl6',
+                                   'top'           : os.path.join('$GLAST_EXT', '$NAME', '$VERSION', '$COMPILER'),
+                                  },
+                     'win32'   : { 'version'       : 'v5.34.01',
+                                   'top'           : os.path.join('$GLAST_EXT', '$NAME', '$VERSION', '$COMPILER'),
+                                   'libraries'    :
+                                   { 'rootLibs'    : [ 'libCore', 'libCint', 'libRIO', 'libNet', 'libTree', 'libHist','libGraf','libGpad','libMatrix','libPhysics', 'libMathCore', 'libThread'],
+                                     'rootGuiLibs' : [ 'libHist', 'libGraf', 'libGraf3d', 'libGpad','libRint', 'libPostscript', 'libTreePlayer', 'libGui', 'libHistPainter' ],
+                                     'minuitLibs'  : [ 'libMinuit2', 'libMinuit' ],
+                                     'rootTMineLibs': [ 'libTreePlayer', 'libXMLIO', 'libGed', 'libMLP', 'libTMVA', 'libRint', 'libHtml']
+                                   }
+                                 },
+                     'darwin' : { 'dylib-path' : '$LIB-PATH' }
+                   },
+                   'v5.34.03' :
+                   { 'default' : { 'version'      : 'v5.34.03',
+                                   'top'          : os.path.join('$GLAST_EXT', '$NAME', '$VERSION'),
+                                   'include-path' : os.path.join('$TOP', 'include'),
+                                   'lib-path'     : os.path.join('$TOP', 'lib'),
+                                   'ld-path'      : '$LIB-PATH',
+                                   'bin-path'     : os.path.join('$TOP', 'bin'),
+                                   'includes'     : [ 'RVersion.h' ],
+                                   'libraries'    :
+                                   { 'rootLibs'    : [ 'Tree', 'Net', 'Gpad', 'Graf', 'RIO', 'Hist', 'Physics', 'Matrix', 'Core', 'Cint', 'MathCore', 'Thread', 'pthread', 'm', 'dl' ],
+                                     'rootGuiLibs' : [ 'Rint', 'Postscript', 'TreePlayer', 'Tree', 'Net', 'Graf3d', 'Gui', 'HistPainter', 'Gpad' ],
+                                     'minuitLibs'  : [ 'Minuit2', 'Minuit', 'Graf', 'RIO', 'Hist', 'Matrix', 'Core', 'Cint', 'dl' ],
+                                     'rootTMineLibs' : [ 'TreePlayer', 'XMLIO', 'Ged', 'MLP', 'TMVA', 'Rint', 'Html']
+                                   }
+                                 },
+                     'gcc34' :  { 'version'       : 'v5.26.00a-gl6',
+                                   'top'           : os.path.join('$GLAST_EXT', '$NAME', '$VERSION', '$COMPILER'),
+                                  },
+                     'win32'   : { 'version'       : 'v5.34.03',
+                                   'top'           : os.path.join('$GLAST_EXT', '$NAME', '$VERSION', '$COMPILER'),
+                                   'libraries'    :
+                                   { 'rootLibs'    : [ 'libCore', 'libCint', 'libRIO', 'libNet', 'libTree', 'libHist','libGraf','libGpad','libMatrix','libPhysics', 'libMathCore', 'libThread'],
+                                     'rootGuiLibs' : [ 'libHist', 'libGraf', 'libGraf3d', 'libGpad','libRint', 'libPostscript', 'libTreePlayer', 'libGui', 'libHistPainter' ],
+                                     'minuitLibs'  : [ 'libMinuit2', 'libMinuit' ],
+                                     'rootTMineLibs': [ 'libTreePlayer', 'libXMLIO', 'libGed', 'libMLP', 'libTMVA', 'libRint', 'libHtml']
+                                   }
+                                 },
+                     'vc90-debug' : { 'version' : 'v5.34.03-dbg'},
+                     'darwin' : { 'dylib-path' : '$LIB-PATH' }
+                   },
+                   'v5.34.03-i1' :
+                   { 'default' : { 'version'      : 'v5.34.03-gr01',
+                                   'top'          : os.path.join('$GLAST_EXT', '$NAME', '$VERSION'),
+                                   'include-path' : os.path.join('$TOP', 'include'),
+                                   'lib-path'     : os.path.join('$TOP', 'lib'),
+                                   'ld-path'      : '$LIB-PATH',
+                                   'bin-path'     : os.path.join('$TOP', 'bin'),
+                                   'includes'     : [ 'RVersion.h' ],
+                                   'libraries'    :
+                                   { 'rootLibs'    : [ 'Tree', 'Net', 'Gpad', 'Graf', 'RIO', 'Hist', 'Physics', 'Matrix', 'Core', 'Cint', 'MathCore', 'Thread', 'pthread', 'm', 'dl' ],
+                                     'rootGuiLibs' : [ 'Rint', 'Postscript', 'TreePlayer', 'Tree', 'Net', 'Graf3d', 'Gui', 'HistPainter', 'Gpad' ],
+                                     'minuitLibs'  : [ 'Minuit2', 'Minuit', 'Graf', 'RIO', 'Hist', 'Matrix', 'Core', 'Cint', 'dl' ],
+                                     'rootTMineLibs' : [ 'TreePlayer', 'XMLIO', 'Ged', 'MLP', 'TMVA', 'Rint', 'Html']
+                                   }
+                                 },
+                     'gcc34' :  { 'version'       : 'v5.26.00a-gl6',
+                                   'top'           : os.path.join('$GLAST_EXT', '$NAME', '$VERSION', '$COMPILER'),
+                                  },
+                     'win32'   : { 'version'       : 'v5.34.03',
+                                   'top'           : os.path.join('$GLAST_EXT', '$NAME', '$VERSION', '$COMPILER'),
+                                   'bin-path'      : os.path.join('$TOP', 'bin'),
+                                   'libraries'     :
+                                   { 'rootLibs'    : [ 'libCore', 'libCint', 'libRIO', 'libNet', 'libTree', 'libHist','libGraf','libGpad','libMatrix','libPhysics', 'libMathCore', 'libThread'],
+                                     'rootGuiLibs' : [ 'libHist', 'libGraf', 'libGraf3d', 'libGpad','libRint', 'libPostscript', 'libTreePlayer', 'libGui', 'libHistPainter' ],
+                                     'minuitLibs'  : [ 'libMinuit2', 'libMinuit' ],
+                                     'rootTMineLibs': [ 'libTreePlayer', 'libXMLIO', 'libGed', 'libMLP', 'libTMVA', 'libRint', 'libHtml']
+                                   }
+                                 },
+                     'vc90-debug' : { 'version' : 'v5.34.03-gr01-dbg'},
+                     'darwin' : { 'dylib-path' : '$LIB-PATH' }
+                   },
+                    'v5.34.34' :
+                    { 'default' : { 'version'      : 'v5.34.34',
+                                    'top'          : os.path.join('$GLAST_EXT', '$NAME', '$VERSION'),
+                                    'include-path' : os.path.join('$TOP', 'include'),
+                                    'lib-path'     : os.path.join('$TOP', 'lib'),
+                                    'ld-path'      : '$LIB-PATH',
+                                    'bin-path'     : os.path.join('$TOP', 'bin'),
+                                    'includes'     : [ 'RVersion.h' ],
+                                    'libraries'    :
+                                    { 'rootLibs'    : [ 'Tree', 'Net', 'Gpad', 'Graf', 'RIO', 'Hist', 'Physics', 'Matrix', 'Core', 'Cint', 'MathCore', 'Thread', 'pthread', 'm', 'dl' ],
+                                      'rootGuiLibs' : [ 'Rint', 'Postscript', 'TreePlayer', 'Tree', 'Net', 'Graf3d', 'Gui', 'HistPainter', 'Gpad' ],
+                                      'minuitLibs'  : [ 'Minuit2', 'Minuit', 'Graf', 'RIO', 'Hist', 'Matrix', 'Core', 'Cint', 'dl' ],
+                                      'rootTMineLibs' : [ 'TreePlayer', 'XMLIO', 'Ged', 'MLP', 'TMVA', 'Rint', 'Html']
+                                    }
+                                  },
+                      'darwin' : { 'dylib-path' : '$LIB-PATH' }
+
+
+                 },
+                    'conda' :
+                    { 'default' : { 'version'      : '6',
+                                    'top'          : os.path.join('$CONDA'),
+                                    'include-path' : os.path.join('$TOP', 'include', '$NAME'),
+                                    'lib-path'     : os.path.join('$TOP', 'lib'),
+                                    'ld-path'      : '$LIB-PATH',
+                                    'bin-path'     : os.path.join('$TOP', 'bin'),
+                                    'includes'     : [ 'RVersion.h' ],
+                                    'libraries'    :
+                                    { 'rootLibs'    : [ 'Tree', 'Net', 'Gpad', 'Graf', 'RIO', 'Hist', 'Physics', 'Matrix', 'Core', 'pthread', 'm', 'dl'],
+                                      'rootGuiLibs' : [ 'MathCore', 'Thread', 'Rint', 'Postscript', 'TreePlayer', 'Tree', 'Net', 'Graf3d', 'Gui', 'HistPainter', 'Gpad' ],
+                                      'minuitLibs'  : [ 'Minuit2', 'Minuit', 'Graf', 'RIO', 'Hist', 'Matrix', 'Core', 'dl' ]
+                                    }
+                                  },
+                      'darwin' : { 'dylib-path' : '$LIB-PATH' }
+
+
+                 }
+               },
+
     'swig'     : { '1.3.31' :
                    { 'default' : { 'version'    : '1.3.31',
                                    'top'        : os.path.join('$GLAST_EXT', '$NAME', '$VERSION', '$COMPILER'),
