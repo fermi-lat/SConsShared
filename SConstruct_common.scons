@@ -278,7 +278,7 @@ supersedeSettingsDir = '#/' + myVars['myPrefix'] + 'containerSettings'
 #########################
 #  External Libraries   #
 #########################
-allExternals = SConscript('allExternals.scons')
+allExternals = SConscript('allExternals.scons', exports=(baseEnv.GetOption('noroot')))
 
 usedExternals = SConscript(os.path.join(baseSettingsDir, 'externals.scons'),
                            exports = 'allExternals')
