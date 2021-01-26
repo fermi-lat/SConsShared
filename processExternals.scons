@@ -13,7 +13,6 @@ AddOption('--with-GLAST-EXT', dest = 'GLAST-EXT', nargs=1, type='string', action
           help='location of GLAST_EXT type directory layout for external libraries')
 
 def getExternal(name, iversion):
-    print('getting external ' + name)
     fdebug('getting external ' + name)
     configuredExternal = allExternals[name][iversion]['default']
 
