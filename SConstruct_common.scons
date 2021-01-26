@@ -284,7 +284,7 @@ supersedeSettingsDir = '#/' + myVars['myPrefix'] + 'containerSettings'
 allExternals = SConscript('allExternals.scons', exports = 'noroot')
 
 usedExternals = SConscript(os.path.join(baseSettingsDir, 'externals.scons'),
-                           exports = 'allExternals')
+                           exports = 'allExternals noroot')
 
 configuredExternals = SConscript('processExternals.scons', exports = 'allExternals usedExternals')
 
