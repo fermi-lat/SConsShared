@@ -133,7 +133,10 @@ if baseEnv.GetOption('opt'):
 
 if baseEnv.GetOption('noroot'):
     baseEnv.AppendUnique(CPPDEFINES = ['BUILD_WITHOUT_ROOT'])
-
+    noroot = True
+else:
+    noroot = False
+    
 if baseEnv.GetOption('ccflags'):
     baseEnv.AppendUnique(CCFLAGS = baseEnv.GetOption('ccflags').strip().split(" "))
 if baseEnv.GetOption('cxxflags'):
@@ -278,7 +281,7 @@ supersedeSettingsDir = '#/' + myVars['myPrefix'] + 'containerSettings'
 #########################
 #  External Libraries   #
 #########################
-allExternals = SConscript('allExternals.scons', exports=(baseEnv.GetOption('noroot')))
+allExternals = SConscript('allExternals.scons', exports = 'noroot')
 
 usedExternals = SConscript(os.path.join(baseSettingsDir, 'externals.scons'),
                            exports = 'allExternals')
