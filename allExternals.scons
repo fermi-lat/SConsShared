@@ -3114,11 +3114,11 @@ allExternalLibraries = {
                    }
     }
 
-print("NOROOT VALUE: ", noroot)
-
 if noroot == True:
     del allExternalLibraries['ROOT']
-    
+    print('DIC EDIT TRIGGERED.  NOROOT= ',noroot)
+
+
 Return("allExternalLibraries")
 
 # Need an analog of the following code from CMT requirements for ldf:
