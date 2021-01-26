@@ -3116,8 +3116,6 @@ allExternalLibraries = {
 
 if noroot == True:
     del allExternalLibraries['ROOT']
-    print('ROOT KEY= ', allExternalLibraries['ROOT'])
-
 
 Return("allExternalLibraries")
 
