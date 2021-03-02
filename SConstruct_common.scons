@@ -407,7 +407,7 @@ if not baseEnv.GetOption('help'):
     dup = 1                          # using sym links
 
     for pkg in packages:
-        #print "Processing package ", str(pkg)
+        print "Processing package ", str(pkg)
         try:
             if 'NO_VARIANT' in baseEnv:
                 baseEnv.SConscript(os.path.join(pkg,"SConscript"),
