@@ -325,8 +325,8 @@ allExternalLibraries = {
     'Minuit2'  : { '5.34.14' :
                    { 'default' : { 'version'      : '5.34.14',
                                    'top'          : os.path.join('$GLAST_EXT', '$NAME', '$VERSION'),
-                                   'include-path' : os.path.join('$TOP', 'include'),
-                                   'lib-path'     : os.path.join('$TOP', 'lib'),
+                                   'include-path' : os.path.join('$TOP', 'include', 'Minuit2'),
+                                   'lib-path'     : os.path.join('$TOP', 'lib', 'Minuit2'),
                                    'ld-path'      : '$LIB-PATH',
                                    'includes'     : [ 'Minuit2/Minuit2Minimizer.h' ],
                                    'libraries'    : { 'minuit2Libs' : [ 'Minuit2', 'm'] }
