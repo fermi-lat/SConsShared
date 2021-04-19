@@ -338,7 +338,9 @@ allExternalLibraries = {
                                    'include-path' : os.path.join('$TOP', 'include', 'Minuit2'),
                                    'lib-path'     : os.path.join('$TOP', 'lib', 'Minuit2'),
                                    'ld-path'      : '$LIB-PATH',
-                                   'includes'     : [ 'Minuit2/Minuit2/Minimizer.h' ],
+                                   'ld-flags'     : ['-lminuit2'],
+                                   'cxxflags'     : ['-lminuit2'],
+                                   'includes'     : [ 'Minuit2/Minimizer.h' ],
                                    'libraries'    : { 'minuit2Libs' : [ 'Minuit2', 'm'] }
                        }
                    }
